@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "MlsGfyq2DoCwsD6lVnH60FCCW13AP3HCPtcT1UwTn8ggv45/yaBJ039W6rzTrrUyNtXk0cTjl1IvKxgm1DQ9lQ==",
+  "success": true,
+  "projectFilePath": "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/FSharp.fsproj",
+  "expectedPackageFiles": [
+    "/home/kramer91/.nuget/packages/fsharp.core/7.0.0/fsharp.core.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

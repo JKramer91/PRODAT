@@ -1,0 +1,65 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/FSharp.fsproj": {}
+  },
+  "projects": {
+    "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/FSharp.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/FSharp.fsproj",
+        "projectName": "FSharp",
+        "projectPath": "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/FSharp.fsproj",
+        "packagesPath": "/home/kramer91/.nuget/packages/",
+        "outputPath": "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/kramer91/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "/usr/lib/dotnet/sdk/7.0.119/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[7.0.0, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.119/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
