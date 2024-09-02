@@ -206,3 +206,37 @@ let rec eval3 e (env: (string * int) list) : int =
     | Prim("*", e1, e2) -> eval3 e1 env * eval3 e2 env
     | Prim("-", e1, e2) -> eval3 e1 env - eval3 e2 env
     | Prim _ -> failwith "unknown primitive"
+
+//(2.2)
+
+
+let mem x vs = List.exists (fun y -> x = y) vs
+
+let rec union (xs, ys) =
+    match xs with
+    | [] -> ys
+    | x :: xr -> if mem x ys then union (xr, ys) else x :: union (xr, ys)
+
+(* minus xs ys  is the set of all elements in xs but not in ys *)
+
+let rec minus (xs, ys) =
+    match xs with
+    | [] -> []
+    | x :: xr -> if mem x ys then minus (xr, ys) else x :: minus (xr, ys)
+
+(* Find all variables that occur free in expression e *)
+
+let rec freevars e : string list =
+    match e with
+    | CstI i -> []
+    | Var x -> [ x ]
+    | Let(x, ebody) ->
+        let vars = List.map fst x
+        let bindings = List.collect (fun (_, s) -> freevars s) x
+        union (bindings, minus (freevars ebody, vars))
+    | Prim(ope, e1, e2) -> union (freevars e1, freevars e2)
+
+let e17: expr2 =
+    Let([ ("x1", Prim("+", CstI 5, CstI 7)); ("x2", Prim("*", Var "x1", CstI 2)) ], Prim("+", Var "x1", Var "x2"))
+
+printfn "Test e17. Expected result is empty list. : %A" (freevars e17)
