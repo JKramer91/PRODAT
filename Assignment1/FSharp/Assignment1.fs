@@ -19,33 +19,13 @@ let cvalue = lookup env "c"
 
 
 (* Object language expressions with variables *)
-//
+// Exercise 1.1
 
 type expr =
     | CstI of int
     | Var of string
     | Prim of string * expr * expr
     | If of expr * expr * expr
-
-let e1 = CstI 17
-
-let e2 = Prim("+", CstI 3, Var "a")
-
-let e3 = Prim("+", Prim("*", Var "b", CstI 9), Var "a")
-
-//Happy path
-let e4 = Prim("max", CstI 5, CstI 3)
-let e5 = Prim("min", CstI 3, CstI 5)
-let e6 = Prim("==", CstI 5, CstI 5)
-
-//Unhappy path
-let e7 = Prim("==", CstI 2, CstI 5)
-
-let e8 = If(Var "a", CstI 11, CstI 22)
-
-
-
-
 let max x y = if x > y then x else y
 let min x y = if x < y then x else y
 
@@ -64,6 +44,22 @@ let rec eval e (env: (string * int) list) : int =
     | If(e1, e2, e3) -> if (eval e1 env) <> 0 then (eval e2 env) else (eval e3 env)
     | Prim _ -> failwith "unknown primitive"
 
+
+let e1 = CstI 17
+
+let e2 = Prim("+", CstI 3, Var "a")
+
+let e3 = Prim("+", Prim("*", Var "b", CstI 9), Var "a")
+
+//Happy path
+let e4 = Prim("max", CstI 5, CstI 3)
+let e5 = Prim("min", CstI 3, CstI 5)
+let e6 = Prim("==", CstI 5, CstI 5)
+
+//Unhappy path
+let e7 = Prim("==", CstI 2, CstI 5)
+
+let e8 = If(Var "a", CstI 11, CstI 22)
 
 // (ii)
 let e1v = eval e1 env
@@ -179,9 +175,7 @@ let e16 = Add(Mul(CstI 5, Var "x"), Add(Mul(CstI 3, Var "y"), CstI 7))
 printfn "Test e15. Expected result is 3. : %A" (fmt (simplify (diff e15 "x")))
 printfn "Test e16. Expected result is 5. : %A" (fmt (simplify (diff e16 "x")))
 
-//
-
-// (2.1)
+// Exercise 2.1
 type expr2 =
     | CstI of int
     | Var of string
@@ -207,7 +201,7 @@ let rec eval3 e (env: (string * int) list) : int =
     | Prim("-", e1, e2) -> eval3 e1 env - eval3 e2 env
     | Prim _ -> failwith "unknown primitive"
 
-//(2.2)
+// Exercise 2.2
 
 
 let mem x vs = List.exists (fun y -> x = y) vs
@@ -238,5 +232,28 @@ let rec freevars e : string list =
 
 let e17: expr2 =
     Let([ ("x1", Prim("+", CstI 5, CstI 7)); ("x2", Prim("*", Var "x1", CstI 2)) ], Prim("+", Var "x1", Var "x2"))
+let e18 = Let([ "z", CstI 17 ], Prim("+", Var "z", Var "z"))
+printfn "Test e17. Expected result is empty []. : %A" (freevars e17)
+printfn "Test e17. Expected result is empty []. : %A" (freevars e18)
 
-printfn "Test e17. Expected result is empty list. : %A" (freevars e17)
+// Exercise 2.3
+
+type texpr =                            (* target expressions *)
+  | TCstI of int
+  | TVar of int                         (* index into runtime environment *)
+  | TLet of texpr * texpr               (* erhs and ebody                 *)
+  | TPrim of string * texpr * texpr;;
+
+let rec getindex vs x = 
+    match vs with 
+    | []    -> failwith "Variable not found"
+    | y::yr -> if x=y then 0 else 1 + getindex yr x;;
+
+(*let rec tcomp (e : expr2) (cenv : string list) : texpr =
+    match e with
+    | CstI i -> TCstI i
+    | Var x  -> TVar (getindex cenv x)
+    | Let(x, erhs, ebody) -> 
+      let cenv1 = x :: cenv 
+      TLet(tcomp erhs cenv, tcomp ebody cenv1)
+    | Prim(ope, e1, e2) -> TPrim(ope, tcomp e1 cenv, tcomp e2 cenv)*)
