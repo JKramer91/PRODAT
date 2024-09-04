@@ -249,11 +249,17 @@ let rec getindex vs x =
     | []    -> failwith "Variable not found"
     | y::yr -> if x=y then 0 else 1 + getindex yr x;;
 
-(*let rec tcomp (e : expr2) (cenv : string list) : texpr =
+let rec tcomp (e : expr2) (cenv : string list) : texpr =
     match e with
     | CstI i -> TCstI i
     | Var x  -> TVar (getindex cenv x)
-    | Let(x, erhs, ebody) -> 
-      let cenv1 = x :: cenv 
-      TLet(tcomp erhs cenv, tcomp ebody cenv1)
-    | Prim(ope, e1, e2) -> TPrim(ope, tcomp e1 cenv, tcomp e2 cenv)*)
+    | Let(lst, ebody) -> 
+        match lst with 
+        | [] -> tcomp ebody cenv
+        | x::xs ->
+            let cenv1 = fst x :: cenv
+            TLet(tcomp (snd x) cenv, tcomp (Let(xs ,ebody)) cenv1)
+    | Prim(ope, e1, e2) -> TPrim(ope, tcomp e1 cenv, tcomp e2 cenv)
+
+printfn "e17: %A" (e17)
+printfn "Test tcomp: %A" (tcomp e17 [])
