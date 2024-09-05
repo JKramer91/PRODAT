@@ -4,7 +4,15 @@
 
 printfn "hello"
 
-(*
+type sinstr =
+    | SCstI of int (* push integer           *)
+    | SVar of int (* push variable from env *)
+    | SAdd (* pop args, push sum     *)
+    | SSub (* pop args, push diff.   *)
+    | SMul (* pop args, push product *)
+    | SPop (* pop value/unbind var   *)
+    | SSwap (* exchange top and next  *)
+
 let sinstrToInt =
     function
     | SCstI i -> [ 0; i ]
@@ -13,27 +21,34 @@ let sinstrToInt =
     | SSub -> [ 3 ]
     | SMul -> [ 4 ]
     | SPop -> [ 5 ]
-    | SSwap -> [ 6 ] *)
+    | SSwap -> [ 6 ]
 
-(*
-[ SCstI 17
-  SCstI 22
-  SCstI 100
-  SVar 1
-  SMul
-  SSwap
-  SPop
-  SVar 1
-  SAdd
-  SSwap
-  SPop ]
-  *)
 
-//let assemble instrs = List.fold
+
+
+
+let assemble instrs =
+    List.foldBack (fun x acc -> sinstrToInt x :: acc) instrs []
+    |> List.collect (fun x -> x)
+
+let e1 =
+    [ SCstI 17
+      SCstI 22
+      SCstI 100
+      SVar 1
+      SMul
+      SSwap
+      SPop
+      SVar 1
+      SAdd
+      SSwap
+      SPop ]
+
+printfn "%A" (assemble e1)
 
 (* Output the integers in list inss to the text file called fname: *)
 
-(*
+
 let intsToFile (inss: int list) (fname: string) =
     let text = String.concat " " (List.map string inss)
-    System.IO.File.WriteAllText(fname, text) *)
+    System.IO.File.WriteAllText(fname, text)
