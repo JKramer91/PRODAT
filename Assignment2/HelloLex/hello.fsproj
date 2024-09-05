@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="/Users/nh/fsharp/FsLexYacc.Runtime.dll" />
+    <Reference Include="../../fsharp/FsLexYacc.Runtime.dll" />
   </ItemGroup>
-</Project>
+
