@@ -13,3 +13,4 @@
     <Reference Include="../../fsharp/FsLexYacc.Runtime.dll" />
   </ItemGroup>
 
+</Project>
