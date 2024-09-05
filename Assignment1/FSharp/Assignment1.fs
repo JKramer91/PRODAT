@@ -1,11 +1,4 @@
-(* Programming language concepts for software developers, 2010-08-28 *)
-
-(* Evaluating simple expressions with variables *)
-
-module Intro2
-
-(* Association lists map object language variables to their values *)
-
+(* Code from Niels *)
 let env = [ ("a", 3); ("c", 78); ("baf", 666); ("b", 111) ]
 
 let emptyenv = [] (* the empty environment *)
@@ -18,14 +11,16 @@ let rec lookup env x =
 let cvalue = lookup env "c"
 
 
-(* Object language expressions with variables *)
-// Exercise 1.1
 
+// Exercise 1.1  (Our code)
+
+//(i)
 type expr =
     | CstI of int
     | Var of string
     | Prim of string * expr * expr
     | If of expr * expr * expr
+
 let max x y = if x > y then x else y
 let min x y = if x < y then x else y
 
@@ -112,7 +107,7 @@ type aexpr =
     | Var of string
     | Add of aexpr * aexpr
     | Mul of aexpr * aexpr
-    | Sub of aexpr * aexpr
+    | Sub of aexpr * aexpr 
 
 //(ii)
 let e9 = Sub(Var "V", Add(Var "w", Var "z"))
@@ -232,33 +227,34 @@ let rec freevars e : string list =
 
 let e17: expr2 =
     Let([ ("x1", Prim("+", CstI 5, CstI 7)); ("x2", Prim("*", Var "x1", CstI 2)) ], Prim("+", Var "x1", Var "x2"))
+
 let e18 = Let([ "z", CstI 17 ], Prim("+", Var "z", Var "z"))
 printfn "Test e17. Expected result is empty []. : %A" (freevars e17)
 printfn "Test e17. Expected result is empty []. : %A" (freevars e18)
 
 // Exercise 2.3
 
-type texpr =                            (* target expressions *)
-  | TCstI of int
-  | TVar of int                         (* index into runtime environment *)
-  | TLet of texpr * texpr               (* erhs and ebody                 *)
-  | TPrim of string * texpr * texpr;;
+type texpr = (* target expressions *)
+    | TCstI of int
+    | TVar of int (* index into runtime environment *)
+    | TLet of texpr * texpr (* erhs and ebody                 *)
+    | TPrim of string * texpr * texpr
 
-let rec getindex vs x = 
-    match vs with 
-    | []    -> failwith "Variable not found"
-    | y::yr -> if x=y then 0 else 1 + getindex yr x;;
+let rec getindex vs x =
+    match vs with
+    | [] -> failwith "Variable not found"
+    | y :: yr -> if x = y then 0 else 1 + getindex yr x
 
-let rec tcomp (e : expr2) (cenv : string list) : texpr =
+let rec tcomp (e: expr2) (cenv: string list) : texpr =
     match e with
     | CstI i -> TCstI i
-    | Var x  -> TVar (getindex cenv x)
-    | Let(lst, ebody) -> 
-        match lst with 
+    | Var x -> TVar(getindex cenv x)
+    | Let(lst, ebody) ->
+        match lst with
         | [] -> tcomp ebody cenv
-        | x::xs ->
+        | x :: xs ->
             let cenv1 = fst x :: cenv
-            TLet(tcomp (snd x) cenv, tcomp (Let(xs ,ebody)) cenv1)
+            TLet(tcomp (snd x) cenv, tcomp (Let(xs, ebody)) cenv1)
     | Prim(ope, e1, e2) -> TPrim(ope, tcomp e1 cenv, tcomp e2 cenv)
 
 printfn "e17: %A" (e17)
