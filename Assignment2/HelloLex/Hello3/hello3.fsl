@@ -7,7 +7,7 @@ open System
 
 rule Tokenize = parse
   | ['0'-'9']*    { LexBuffer<char>.LexemeString lexbuf }
-  | [+-]? (['0'-'9']* ['.'] ) ? ['0'-'9']+ {LexBuffer<char>.LexemeString lexbuf}
+  | ['+''-']? (['0'-'9']* ['.'] ) ? ['0'-'9']+ {LexBuffer<char>.LexemeString lexbuf}
   | _               { failwith "Lexer error: illegal symbol" }
 
 
