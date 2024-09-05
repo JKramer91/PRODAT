@@ -7,3 +7,9 @@ A hello.fs and a hello.fsi file is generated during the process.
 
 (2.2)
 There are three states: State 0, 1 and 2. 
+
+(2.6)
+
+* That the lexer can parse 34 is expected behaviour since we have the regex rules which checks for zero or more repetitions of the numbers between 0 and 9. 
+* That the lexer can recognise 34.34 is expected, because we have the regex rule that can match floating point numbers.
+* That the lexer recognizes 34 when getting the input string 34,34 is expected behaviour because it does not recognize a "," instead of a ".", so therefore it succesfully recognise the first part "34" before the comma, but not the part after it. The reason it does not go into the failure case, is because that it partially matches until it cannot match anymore and then it just throws out the rest. 
