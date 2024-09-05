@@ -1,0 +1,70 @@
+<!--
+***********************************************************************************************
+FsLexYacc.targets
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+		  created a backup copy.  Incorrect changes to this file will make it
+		  impossible to load or build your projects from the command-line or the IDE.
+
+PowerPack build rules.
+
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<CompileDependsOn>CallFsLex;CallFsYacc;$(CompileDependsOn)</CompileDependsOn>
+		<FsLexToolPath Condition="'$(FsLexToolPath)' == ''">$(MSBuildThisFileDirectory)/fslex/net6.0</FsLexToolPath>
+		<FsLexToolExe Condition="'$(FsLexToolExe)' == ''">fslex.dll</FsLexToolExe>
+		<FsYaccToolPath Condition="'$(FsYaccToolPath)' == ''">$(MSBuildThisFileDirectory)/fsyacc/net6.0</FsYaccToolPath>
+		<FsYaccToolExe Condition="'$(FsYaccToolExe)' == ''">fsyacc.dll</FsYaccToolExe>
+		<FsLexYaccToolRunner Condition="'$(UseFsLexYaccToolRunner)' != 'false' AND '$(FsLexYaccToolRunner)' == ''">dotnet </FsLexYaccToolRunner>
+	</PropertyGroup>
+
+	<!-- Build FsLex files. -->
+	<Target
+		Name="CallFsLex"
+		Inputs="@(FsLex)"
+		Outputs="@(FsLex->'$(FsLexOutputFolder)%(Filename).fs')"
+		Condition="'@(FsLex)'!=''"
+    BeforeTargets="CoreCompile">
+
+		<!-- Create the output directory -->
+		<MakeDir Directories="$(FsLexOutputFolder)"/>
+		<!-- Call FsLex -->
+		<Exec Command="$(FsLexYaccToolRunner)&quot;$(FsLexToolPath)\$(FsLexToolExe)&quot;  -o &quot;$(FsLexOutputFolder)%(FsLex.Filename).fs&quot; %(FsLex.OtherFlags) %(FsLex.Identity)"/>
+		<!-- Make sure it will get cleaned  -->
+		<ItemGroup>
+			<FileWrites Include="$(FsLexOutputFolder)%(FsLex.Filename).fs"/>
+		</ItemGroup>
+	</Target>
+
+	<!-- Build FsYacc files. -->
+	<Target
+		Name="CallFsYacc"
+		Inputs="@(FsYacc)"
+		Outputs="@(FsYacc->'$(FsYaccOutputFolder)%(Filename).fs')"
+		Condition="'@(FsYacc)'!=''"
+    BeforeTargets="CoreCompile">
+
+		<!-- Create the output directory -->
+		<MakeDir Directories="$(FsYaccOutputFolder)"/>
+		<Exec Command="$(FsLexYaccToolRunner)&quot;$(FsYaccToolPath)\$(FsYaccToolExe)&quot;  -o &quot;$(FsYaccOutputFolder)%(FsYacc.Filename).fs&quot; %(FsYacc.OtherFlags) %(FsYacc.Identity)"/>
+
+		<!-- Make sure it will get cleaned  -->
+		<ItemGroup>
+			<FileWrites Include="$(FsLexOutputFolder)%(FsLex.Filename).fs"/>
+		</ItemGroup>
+	</Target>
+	<ItemGroup>
+		<AvailableItemName Include="FsLex">
+			<Visible>false</Visible>
+		</AvailableItemName>
+		<AvailableItemName Include="FsYacc">
+			<Visible>false</Visible>
+		</AvailableItemName>
+	</ItemGroup>
+</Project>
+
+
