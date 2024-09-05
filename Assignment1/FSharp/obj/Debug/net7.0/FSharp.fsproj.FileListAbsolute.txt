@@ -27,3 +27,32 @@
 /home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.pdb
 /home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.genruntimeconfig.cache
 /home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/ref/FSharp.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/FSharp
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/FSharp.deps.json
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/FSharp.runtimeconfig.json
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/FSharp.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/FSharp.pdb
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/FSharp.Core.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/cs/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/de/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/es/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/fr/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/it/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/ja/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/ko/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/pl/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/pt-BR/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/ru/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/tr/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/zh-Hans/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/bin/Debug/net7.0/zh-Hant/FSharp.Core.resources.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.fsproj.AssemblyReference.cache
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.AssemblyInfoInputs.cache
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.AssemblyInfo.fs
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.fsproj.CoreCompileInputs.cache
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.fsproj.CopyComplete
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/refint/FSharp.dll
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.pdb
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/FSharp.genruntimeconfig.cache
+/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/Debug/net7.0/ref/FSharp.dll

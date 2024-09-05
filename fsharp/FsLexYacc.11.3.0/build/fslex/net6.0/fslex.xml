@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>fslex</name></assembly>
+<members>
+<member name="M:FSharp.Text.ArgParser.Usage(System.Collections.Generic.IEnumerable{FSharp.Text.ArgInfo},Microsoft.FSharp.Core.FSharpOption{System.String})">
+<summary>
+ Prints the help for each argument.
+</summary>
+</member>
+<member name="M:FSharp.Text.ArgParser.ParsePartial(Microsoft.FSharp.Core.FSharpRef{System.Int32},System.String[],System.Collections.Generic.IEnumerable{FSharp.Text.ArgInfo},Microsoft.FSharp.Core.FSharpOption{Microsoft.FSharp.Core.FSharpFunc{System.String,Microsoft.FSharp.Core.Unit}},Microsoft.FSharp.Core.FSharpOption{System.String})">
+<summary>
+ Parse some of the arguments given by &apos;argv&apos;, starting at the given position
+</summary>
+</member>
+<member name="M:FSharp.Text.ArgParser.Parse(System.Collections.Generic.IEnumerable{FSharp.Text.ArgInfo},Microsoft.FSharp.Core.FSharpOption{Microsoft.FSharp.Core.FSharpFunc{System.String,Microsoft.FSharp.Core.Unit}},Microsoft.FSharp.Core.FSharpOption{System.String})">
+<summary>
+ Parse the arguments given by System.Environment.GetCommandLineArgs()
+ according to the argument processing specifications &quot;specs&quot;.
+ Args begin with &quot;-&quot;. Non-arguments are passed to &quot;f&quot; in
+ order.  &quot;use&quot; is printed as part of the usage line if an error occurs.
+</summary>
+</member>
+<member name="P:FSharp.Text.ArgInfo.Name">
+<summary>
+ Return the name of the argument
+</summary>
+</member>
+<member name="P:FSharp.Text.ArgInfo.HelpText">
+<summary>
+ Return the usage help associated with the argument
+</summary>
+</member>
+<member name="P:FSharp.Text.ArgInfo.ArgType">
+<summary>
+ Return the argument type and action of the argument
+</summary>
+</member>
+<member name="T:FSharp.Text.ArgType">
+<summary>
+ The spec value describes the action of the argument,
+ and whether it expects a following parameter.
+</summary>
+</member>
+</members>
+</doc>

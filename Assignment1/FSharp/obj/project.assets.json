@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net7.0": {
-      "FSharp.Core/7.0.0": {
+      "FSharp.Core/7.0.403": {
         "type": "package",
         "compile": {
           "lib/netstandard2.1/FSharp.Core.dll": {
@@ -59,14 +59,15 @@
     }
   },
   "libraries": {
-    "FSharp.Core/7.0.0": {
-      "sha512": "eduWrl9HdhiN9Fe1PbgdQj7saRLARfSOj/yKE/Qp3KIYnk4xVy0RyPg2KgX7Mq99Qtqg1Q2xhdofR3IADmnuBg==",
+    "FSharp.Core/7.0.403": {
+      "sha512": "QYCYEhAj3GccfPdK6EDZu3Yz7I8p75nVHmNnV/9duxTAcqmstbG87waXDC4LBz0/8Jb0teb0ry/xLM2pjk/UAw==",
       "type": "package",
-      "path": "fsharp.core/7.0.0",
+      "path": "fsharp.core/7.0.403",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "Icon.png",
-        "fsharp.core.7.0.0.nupkg.sha512",
+        "fsharp.core.7.0.403.nupkg.sha512",
         "fsharp.core.nuspec",
         "lib/netstandard2.0/FSharp.Core.dll",
         "lib/netstandard2.0/FSharp.Core.xml",
@@ -103,29 +104,29 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "FSharp.Core >= 7.0.0"
+      "FSharp.Core >= 7.0.403"
     ]
   },
   "packageFolders": {
-    "/home/kramer91/.nuget/packages/": {}
+    "/Users/lauritzandersen/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/FSharp.fsproj",
+      "projectUniqueName": "/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/FSharp.fsproj",
       "projectName": "FSharp",
-      "projectPath": "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/FSharp.fsproj",
-      "packagesPath": "/home/kramer91/.nuget/packages/",
-      "outputPath": "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/obj/",
+      "projectPath": "/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/FSharp.fsproj",
+      "packagesPath": "/Users/lauritzandersen/.nuget/packages/",
+      "outputPath": "/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/kramer91/.nuget/NuGet/NuGet.Config"
+        "/Users/lauritzandersen/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "/usr/lib/dotnet/sdk/7.0.119/FSharp/library-packs": {},
+        "/usr/local/share/dotnet/sdk/7.0.405/FSharp/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -142,7 +143,7 @@
           "FSharp.Core": {
             "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
             "target": "Package",
-            "version": "[7.0.0, )",
+            "version": "[7.0.403, )",
             "generatePathProperty": true
           }
         },
@@ -162,7 +163,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.119/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.405/RuntimeIdentifierGraph.json"
       }
     }
   }

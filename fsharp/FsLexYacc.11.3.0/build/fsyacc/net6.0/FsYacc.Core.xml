@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>FsYacc.Core</name></assembly>
+<members>
+<member name="T:FsLexYacc.FsYacc.AST.PropagateTable">
+<summary>
+ A mutable table giving a Set&lt;KernelItemIndex&gt; for each kernel. The kernels represent the
+ &quot;propagate&quot; items for the kernel. TODO: document this more w.r.t. the Dragon book.
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.SpontaneousTable">
+<summary>
+ A mutable table giving a lookahead set Set&lt;Terminal&gt; for each kernel. The terminals represent the
+ &quot;spontaneous&quot; items for the kernel. TODO: document this more w.r.t. the Dragon book.
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.Closure1Table">
+<summary>
+ Hold the results of cpmuting the LALR(1) closure of an LR(0) kernel
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.KernelTable">
+<summary>
+ A mutable table giving an index to each LR(0) kernel. Kernels are referred to only by index.
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.LookaheadTable">
+<summary>
+ A mutable table maping kernels to sets of lookahead tokens
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.ProductionTable">
+<summary>
+ Allocate indexes for each production
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.TerminalTable">
+<summary>
+ Allocate indexes for each terminal
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.NonTerminalTable">
+<summary>
+ Allocate indexes for each non-terminal
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.GotoItemIndex">
+<summary>
+ Indexes into the memoizing table for the Goto computations
+ Embed in a single integer, since these are faster
+ keys for the dictionary hash tables
+
+ Logically:
+
+   type GotoItemIndex = GotoItemIdx of KernelIdx * SymbolIndex
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.KernelItemIndex">
+<summary>
+ Indexes in the LookaheadTable, SpontaneousTable, PropagateTable
+ Embed in a single integer, since these are faster
+ keys for the dictionary hash tables
+
+ Logically:
+
+   type KernelItemIndex = KernelItemIdx of KernelIdx * Item0
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.SymbolIndex">
+<summary>
+ Representation of Symbols.
+ Ideally would be declared as
+    type SymbolIndex = PTerminal of TerminalIndex | PNonTerminal of NonTerminalIndex
+ but for performance reasons we embed as a simple integer (saves ~10%)
+
+ We use an active pattern to reverse the embedding.
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.TerminalIndex">
+<summary>
+ Indexes in the TerminalTable and NonTerminalTable
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.KernelIdx">
+<summary>
+ Indexes of LR(0) kernels in the KernelTable
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.Kernel">
+<summary>
+ LR(0) kernels
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.Action">
+<summary>
+ Part of the output of CompilerLalrParserSpec
+</summary>
+</member>
+<member name="T:FsLexYacc.FsYacc.AST.Item0">
+<summary>
+ Represent (ProductionIndex,ProdictionDotIndex) as one integer
+</summary>
+</member>
+<member name="M:FsLexYacc.FsYacc.AST.CompilerLalrParserSpec``1(Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Core.Unit},Microsoft.FSharp.Core.Unit},FsLexYacc.FsYacc.AST.ProcessedParserSpec)">
+<summary>
+ Compile a pre-processed LALR parser spec to tables following the Dragon book algorithm
+</summary>
+</member>
+<member name="M:FsLexYacc.FsYacc.AST.CreateDictionary``2(System.Collections.Generic.IEnumerable{System.Tuple{``0,``1}})">
+<summary>
+ A standard utility to create a dictionary from a list of pairs
+</summary>
+</member>
+<member name="M:FsLexYacc.FsYacc.AST.Memoize``2(Microsoft.FSharp.Core.FSharpFunc{``0,``1})">
+<summary>
+ A general standard memoization utility. Be sure to apply to only one (function) argument to build the
+ residue function!
+</summary>
+</member>
+<member name="M:FsLexYacc.FsYacc.AST.LeastFixedPoint``1(Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Collections.FSharpList{``0}},Microsoft.FSharp.Collections.FSharpSet{``0})">
+<summary>
+ A standard utility to compute a least fixed point of a set under a generative computation
+</summary>
+</member>
+<member name="M:FsLexYacc.FsYacc.AST.ProcessWorkList``1(Microsoft.FSharp.Collections.FSharpList{``0},Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Core.Unit},Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Core.Unit}})">
+<summary>
+ Create a work list and loop until it is exhausted, calling a worker function for
+ each element. Pass a function to queue additional work on the work list
+ to the worker function
+</summary>
+</member>
+<member name="M:FsLexYacc.FsYacc.AST.|KeyValue|``2(System.Collections.Generic.KeyValuePair{``0,``1})">
+<summary>
+ An active pattern that should be in the F# standard library
+</summary>
+</member>
+<member name="M:FsLexYacc.FsYacc.Parser.prodIdxToNonTerminal(System.Int32)">
+<summary>
+ This function maps production indexes returned in syntax errors to strings representing the non terminal that would be produced by that production
+</summary>
+</member>
+</members>
+</doc>

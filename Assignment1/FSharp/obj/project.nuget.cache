@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "MlsGfyq2DoCwsD6lVnH60FCCW13AP3HCPtcT1UwTn8ggv45/yaBJ039W6rzTrrUyNtXk0cTjl1IvKxgm1DQ9lQ==",
+  "dgSpecHash": "CE7apMvMSCveUVvZwRnt5S7U/NfcccyJ3x3s8Pw+wvw5IkUPkkx4R+s/+O4+6LYRRpEoVcB5BF09lOciq7wl3g==",
   "success": true,
-  "projectFilePath": "/home/kramer91/workspace/skole/semester5/programmersomdata/exercises/PRODAT/Assignment1/FSharp/FSharp.fsproj",
+  "projectFilePath": "/Users/lauritzandersen/SWU/5Sem/Programmer Som Data/PRODAT/Assignment1/FSharp/FSharp.fsproj",
   "expectedPackageFiles": [
-    "/home/kramer91/.nuget/packages/fsharp.core/7.0.0/fsharp.core.7.0.0.nupkg.sha512"
+    "/Users/lauritzandersen/.nuget/packages/fsharp.core/7.0.403/fsharp.core.7.0.403.nupkg.sha512"
   ],
   "logs": []
 }

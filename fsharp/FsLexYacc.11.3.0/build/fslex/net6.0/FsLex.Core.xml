@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>FsLex.Core</name></assembly>
+<members>
+<member name="T:FsLexYacc.FsLex.AST.RuleArgument">
+<summary>
+ Capture the name of the argument inside a rule.
+ When the rule is typed, the type name is expected to have a single identifier.
+ This is a known limitation and the caller can get around this by using a type alias.
+</summary>
+</member>
+<member name="M:FsLexYacc.FsLex.Parser.prodIdxToNonTerminal(System.Int32)">
+<summary>
+ This function maps production indexes returned in syntax errors to strings representing the non terminal that would be produced by that production
+</summary>
+</member>
+<member name="T:FsLexYacc.FsLex.Driver.GeneratorState">
+<summary>
+ Wraps the inputs to the code generator
+</summary>
+</member>
+</members>
+</doc>
