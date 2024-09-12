@@ -53,5 +53,41 @@ LET NAME(Z) EQ CSTINT(17) IN NAME(Z) PLUS CSTINT(2) TIMES CSTINT(3) END EOF ==>
 let z = (17) in z + 2 * 3 end EOF 
 ```
 
-- 
+# Question 3.4
+Draw as tree
 
+```
+//Incorrect - Draw by hand instead
+                MAIN
+                 |
+                EXPR 
+                 |
+          +------+------+
+          |             |
+         LET           EOF
+          |
+  +-------+-------+
+  |               |
+ NAME            EQ
+  |               |
+  z              EXPR
+                 |
+        +--------+--------+
+        |                 |
+       (EXPR)            IN EXPR
+        |                 |
+       CSTINT            +-----+----+
+                               |
+                              PLUS
+                         +-----+-----+    
+                         |           |
+                       EXPR         EXPR
+                         |           |
+                         z          CSTINT -> 2
+                                    |
+                                    TIMES
+                                    |
+                                  CSTINT -> 3
+
+
+```
