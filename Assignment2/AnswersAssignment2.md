@@ -15,3 +15,15 @@ There are three states: State 0, 1 and 2.
 * That the lexer recognizes 34 when getting the input string 34,34 is expected behaviour because it does not recognize a "," instead of a ".", so therefore it succesfully recognise the first part "34" before the comma, but not the part after it. The reason it does not go into the failure case, is because that it partially matches until it cannot match anymore and then it just throws out the rest. 
 
 # Question 3.2 
+
+We have created the regex: $(ab{^2}|b)^{*}a?$
+
+The NFA is shown below for this regex:
+![NFA](./NFA_images/NFA.jpg) 
+
+We derive to the DFA via the following table:
+![table](./NFA_images/table.jpg) 
+
+And the final DFA is:
+![DFA](./NFA_images/DFA.jpg) 
+
