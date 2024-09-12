@@ -26,15 +26,17 @@ $$\Sigma = \{\text{let}, \text{in}, \text{end}, *, +, -, -\text{CSTINT}, \text{C
 
 
 ### Production rules:
-MAIN -> EXPR EOF
-EXPR -> NAME
-EXPR -> CSTINT
-EXPR -> MINUS CSTINT
-EXPR -> LPAR EXPR RPAR
-EXPR -> LET NAME EQ EXPR IN EXPR END
-EXPR -> EXPR TIMES EXPR
-EXPR -> EXPR PLUS EXPR
-EXPR -> EXPR MINUS EXPR
+```
+MAIN -> EXPR EOF //Rule A 
+EXPR -> NAME //Rule B
+EXPR -> CSTINT //Rule C
+EXPR -> MINUS CSTINT //Rule D
+EXPR -> LPAR EXPR RPAR //Rule E
+EXPR -> LET NAME EQ EXPR IN EXPR END //Rule F
+EXPR -> EXPR TIMES EXPR //Rule G
+EXPR -> EXPR PLUS EXPR //Rule H
+EXPR -> EXPR MINUS EXPR //Rule I
+```
 
 ### Right most deviation:
 ``` 
