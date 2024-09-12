@@ -25,8 +25,6 @@ let sinstrToInt =
 
 
 
-
-
 let assemble instrs =
     List.foldBack (fun x acc -> sinstrToInt x :: acc) instrs []
     |> List.collect (fun x -> x)
