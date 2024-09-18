@@ -43,9 +43,9 @@ EXPR -> EXPR MINUS EXPR //Rule I
 let z = (17) in z + 2 * 3 end EOF -> 
 
 MAIN ==> 
-EXPR EOF ==> 
-LET NAME EQ EXPR IN (**EXPR**) END EOF ==> 
-LET NAME EQ EXPR IN EXPR PLUS (**EXPR**) END EOF ==> 
+EXPR EOF ==>                                                 
+LET NAME EQ EXPR IN (**EXPR**) END EOF ==>                  
+LET NAME EQ EXPR IN EXPR PLUS (**EXPR**) END EOF ==>        
 LET NAME EQ EXPR IN EXPR PLUS EXPR TIMES (**EXPR**) END EOF ==>  
 LET NAME EQ EXPR IN EXPR PLUS (**EXPR**) TIMES CSTINT END EOF ==> 
 LET NAME EQ EXPR IN (**EXPR**) PLUS CSTINT TIMES CSTINT END EOF ==>
@@ -56,40 +56,3 @@ let z = (17) in z + 2 * 3 end EOF
 ```
 
 # Question 3.4
-Draw as tree
-
-```
-//Incorrect - Draw by hand instead
-                MAIN
-                 |
-                EXPR 
-                 |
-          +------+------+
-          |             |
-         LET           EOF
-          |
-  +-------+-------+
-  |               |
- NAME            EQ
-  |               |
-  z              EXPR
-                 |
-        +--------+--------+
-        |                 |
-       (EXPR)            IN EXPR
-        |                 |
-       CSTINT            +-----+----+
-                               |
-                              PLUS
-                         +-----+-----+    
-                         |           |
-                       EXPR         EXPR
-                         |           |
-                         z          CSTINT -> 2
-                                    |
-                                    TIMES
-                                    |
-                                  CSTINT -> 3
-
-
-```
