@@ -56,3 +56,4 @@ let z = (17) in z + 2 * 3 end EOF
 ```
 
 # Question 3.4
+![Tree](./Images/Tree.png) 
