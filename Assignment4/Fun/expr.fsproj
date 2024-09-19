@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Absyn.fs" />
+    <Compile Include="FunPar.fsi" />
+    <Compile Include="FunPar.fs" />
+    <Compile Include="FunLex.fsi" />
+    <Compile Include="FunLex.fs" />
+    <Compile Include="Parse.fs" />
+    <Compile Include="Fun.fs" />
+    <Compile Include="ParseAndRun.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="../../fsharp/FsLexYacc.Runtime.dll" />
+  </ItemGroup>
+
+</Project>

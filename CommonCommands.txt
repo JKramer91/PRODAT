@@ -2,9 +2,13 @@ Be sure you are located in the "PRODAT"-folder.
 
 Lexing: 
 fslex --unicode ./Assignment<Number>/Expr/ExprLex.fsl 
+Or
+fslex --unicode ./Assignment<No>/Fun/FunLex.fsl 
 
 Parsing: 
 fsyacc --module ./Assignment<Number>/Expr/ExprPar ./Assignment<Number>/Expr/ExprPar.fsy 
+Or 
+fsyacc --module ./Assignment<No>/Fun/FunPar ./Assignment<No>/Fun/FunPar.fsy 
 
 Interactive mode to parse stuff through cmd:
 dotnet fsi -r ./fsharp/FsLexYacc.Runtime.dll ./Assignment<Number>/Expr/Absyn.fs ./Assignment<Number>/Expr/ExprPar.fs ./Assignment<Number>/Expr/ExprLex.fs ./Assignment<Number>/Expr/Parse.fs
@@ -17,3 +21,7 @@ Then it should work.
 
 ((Temporary until we find a way to fix it))
 
+
+// For assignment 4 
+dotnet fsi -r ./fsharp/FsLexYacc.Runtime.dll ./Assignment4/Fun/Absyn.fs ./Assignment4/Fun/FunPar.fs ./Assignment4/Fun/FunLex.fs ./Assignment4/Fun/Parse.fs
+dotnet fsi -r ./fsharp/FsLexYacc.Runtime.dll ./Assignment4/Fun/Absyn.fs ./Assignment4/Fun/FunPar.fs ./Assignment4/Fun/FunLex.fs ./Assignment4/Fun/Parse.fs ./Assignment4/Fun/Fun.fs ./Assignment4/Fun/ParseAndRun.fs
