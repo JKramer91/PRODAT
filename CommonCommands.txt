@@ -1,0 +1,19 @@
+Be sure you are located in the "PRODAT"-folder. 
+
+Lexing: 
+fslex --unicode ./Assignment<Number>/Expr/ExprLex.fsl 
+
+Parsing: 
+fsyacc --module ./Assignment<Number>/Expr/ExprPar ./Assignment<Number>/Expr/ExprPar.fsy 
+
+Interactive mode to parse stuff through cmd:
+dotnet fsi -r ./fsharp/FsLexYacc.Runtime.dll ./Assignment<Number>/Expr/Absyn.fs ./Assignment<Number>/Expr/ExprPar.fs ./Assignment<Number>/Expr/ExprLex.fs ./Assignment<Number>/Expr/Parse.fs
+
+When Lexer and Parser files are generated:
+
+Double-check that paths and module names are correct in ExprLex.fs, ExprPar.fs.
+If it says "Assignment<Number>/Expr" - Mark it, and delete all occurences.
+Then it should work. 
+
+((Temporary until we find a way to fix it))
+
