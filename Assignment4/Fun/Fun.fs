@@ -121,3 +121,17 @@ let ex5 =
             Call(Var "fib", CstI 25)
         )
     )
+
+(*
+
+4.2 ) 
+
+This is start on example program for Sum 
+let ex6 =
+    Letfun(
+        "Sum",
+        "n",
+        //Logic 
+    )
+
+*)
