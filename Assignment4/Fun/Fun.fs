@@ -124,14 +124,5 @@ let ex5 =
 
 (*
 
-4.2 ) 
-
-This is start on example program for Sum 
-let ex6 =
-    Letfun(
-        "Sum",
-        "n",
-        //Logic 
-    )
 
 *)
