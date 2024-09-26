@@ -78,13 +78,17 @@ let ex5 =
               end"
 
 
+// (4.2)
+
+//4.2a
 let ex6 =
     fromString @"let sum n = if n = 1 then 1 else n + sum (n-1) in sum 1000 end"
 
 
+//4.2b
 let ex7 = fromString @"let pow e = if e = 0 then 1 else 3 * pow (e-1) in pow 8 end"
 
-
+//4.2c
 let ex8 =
     fromString
         @"let pow e = if e = 0 then 1 else 3 * pow (e-1) in 
@@ -93,11 +97,39 @@ let ex8 =
                       end "
 
 
-let ex9 =
+//4.2d
+
+// This is how we first thought of doing it before the hacky solution below (this threw an exception though and thus didn't work)
+(*let ex9 =
     fromString
         @"let e = 8 in 
                   let pow b = if e = 0 then 1 else b * pow (e-1) in 
                   let sumExp b = if b = 1 then 1 else pow b + sumExp (b-1)
                   in sumExp 10 
                   end
+                end
+            end"*)
+
+let ex9 =
+    fromString
+        @"let pow x = x*x*x*x*x*x*x*x
+                  in let sumExp b = if b = 1 then 1 else pow b + sumExp (b-1) 
+                  in sumExp 10 
+                  end
                 end"
+
+// 4.4 test
+let ex10 =
+    fromString @"let pow x n = if n=0 then 1 else x * pow x (n-1) in pow 3 8 end"
+
+let ex11 =
+    fromString
+        @"let max2 a b = if a<b then b else a
+        in let max3 a b c = max2 a (max2 b c)
+        in max3 25 6 62 end
+        end"
+
+// 4.5 Tests
+let ex12 = fromString @"let test x = if true || false then 1 else 0 in test 5 end"
+
+let ex13 = fromString @"let test = true || false in test end"

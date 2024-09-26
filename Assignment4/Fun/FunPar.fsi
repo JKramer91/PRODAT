@@ -10,6 +10,8 @@ type token =
   | LT
   | GE
   | LE
+  | OR
+  | AND
   | PLUS
   | MINUS
   | TIMES
@@ -37,6 +39,8 @@ type tokenId =
     | TOKEN_LT
     | TOKEN_GE
     | TOKEN_LE
+    | TOKEN_OR
+    | TOKEN_AND
     | TOKEN_PLUS
     | TOKEN_MINUS
     | TOKEN_TIMES
@@ -59,6 +63,8 @@ type tokenId =
 type nonTerminalId = 
     | NONTERM__startMain
     | NONTERM_Main
+    | NONTERM_paramlist
+    | NONTERM_arglist
     | NONTERM_Expr
     | NONTERM_AtExpr
     | NONTERM_AppExpr
