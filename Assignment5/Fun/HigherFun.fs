@@ -60,10 +60,7 @@ let rec eval (e: expr) (env: value env) : value =
     | Letfun(f, x, fBody, letBody) ->
         let bodyEnv = (f, Closure(f, x, fBody, env)) :: env
         eval letBody bodyEnv
-    | Fun(s, e) ->
-        //let closEnv = (s, Clos(s, e, env)) :: env
-        //eval e closEnv
-        Clos(s, e, env)
+    | Fun(s, e) -> Clos(s, e, env)
     | Call(eFun, eArg) ->
         let fClosure =
             eval eFun env (* Different from Fun.fs - to enable first class functions *)
@@ -73,8 +70,11 @@ let rec eval (e: expr) (env: value env) : value =
             let xVal = eval eArg env
             let fBodyEnv = (x, xVal) :: (f, fClosure) :: fDeclEnv in
             eval fBody fBodyEnv
+        | Clos(s, e, env) ->
+            let sVal = eval eArg env
+            let fBodyEnv = (s, sVal) :: env
+            eval e fBodyEnv
         | _ -> failwith "eval Call: not a function"
-
 
 
 (* Evaluate in empty environment: program must have no free variables: *)

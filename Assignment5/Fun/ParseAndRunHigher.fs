@@ -88,3 +88,13 @@ let ex13 =
     fromString
         @"let add x = let f y = x+y in f end
           in add 2 end"
+
+let ex14 =
+    fromString
+        @"let add x = fun y -> x + y
+            in add 2 5 end"
+
+let ex15 =
+    fromString
+        @"let add = fun x -> fun y -> x+y
+            in add 2 5 end"

@@ -121,5 +121,3 @@ let ex5 =
             Call(Var "fib", CstI 25)
         )
     )
-
-
