@@ -37,6 +37,7 @@ type typ =
     | TypI (* int                         *)
     | TypB (* bool                        *)
     | TypF of typ * typ (* (argumenttype, resulttype)  *)
+    | TypL of typ
 
 (* New abstract syntax with explicit types, instead of Absyn.expr: *)
 
@@ -50,6 +51,7 @@ type tyexpr =
     | Letfun of string * string * typ * tyexpr * typ * tyexpr
     (* (f,       x,       xTyp, fBody,  rTyp, letBody *)
     | Call of tyexpr * tyexpr
+    | ListExpr of tyexpr list * typ
 
 (* A runtime value is an integer or a function closure *)
 
@@ -103,6 +105,13 @@ let rec typ (e: tyexpr) (env: typ env) : typ =
     match e with
     | CstI i -> TypI
     | CstB b -> TypB
+    | ListExpr(l, t) ->
+        match l with
+        | lst ->
+            if List.forall (fun x -> (typ x env) = t) lst then
+                TypL t
+            else
+                failwith "ListExpr: type error"
     | Var x -> lookup env x
     | Prim(ope, e1, e2) ->
         let t1 = typ e1 env
@@ -191,3 +200,6 @@ let exErr3 =
 
 let exErr4 =
     Letfun("f", "x", TypB, If(Var "x", CstI 11, CstI 22), TypB, Call(Var "f", CstB true))
+
+let test = ListExpr([ CstI 5; CstI 3 ], TypI)
+printfn "%A" (typ test [])

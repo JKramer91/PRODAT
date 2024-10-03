@@ -8,3 +8,4 @@
 let test1 = (merge [ 3; 5; 12 ] [ 2; 3; 4; 7 ])
 
 printfn "%A" test1
+
