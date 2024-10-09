@@ -48,7 +48,7 @@ ParseAndType.inferType ParseAndType.exampl2;;
 System.Exception: type error: circularity 
 ```
 
-The circularity consists in the fact that g is applied to g within f, and we cannot know the type of g at this point. 
+The circularity consists in the fact that g is applied to g within f, and we cannot know the type of g at this point. There is the restriction the types but be finite and non-circular. In this case, the example is ill-typed. 
 
 ## Exampl4 fails:
 The error message we got was
