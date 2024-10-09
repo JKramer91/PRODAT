@@ -148,7 +148,7 @@ let exampl1 =
 let exampl2 =
     (fromString
         "let f g = g g 
-                 in f end") //This one fails. Circularity.
+                 in f end") //This one fails. Circularity. 
 
 let exampl3 =
     (fromString
