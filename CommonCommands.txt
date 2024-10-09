@@ -30,4 +30,4 @@ dotnet fsi -r ./fsharp/FsLexYacc.Runtime.dll ./Assignment4/Fun/Absyn.fs ./Assign
 //For assignment 5 : 
 fsyacc --module ./Assignment5/Fun/FunPar ./Assignment5/Fun/FunPar.fsy
 fslex --unicode ./Assignment5/Fun/FunLex.fsl	
-dotnet fsi -r ./fsharp/FsLexYacc.Runtime.dll ./Assignment5/Fun/Util.fs ./Assignment5/Fun/Absyn.fs ./Assignment5/Fun/FunPar.fs ./Assignment5/Fun/FunLex.fs ./Assignment5/Fun/Parse.fs ./Assignment5/Fun/HigherFun.fs ./Assignment5/Fun/ParseAndRunHigher.fs
+dotnet fsi -r ./fsharp/FsLexYacc.Runtime.dll ./Assignment5/Fun/Util.fs ./Assignment5/Fun/Absyn.fs ./Assignment5/Fun/FunPar.fs ./Assignment5/Fun/FunLex.fs ./Assignment5/Fun/Parse.fs ./Assignment5/Fun/TypeInference.fs ./Assignment5/Fun/ParseAndType.fs

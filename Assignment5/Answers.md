@@ -38,3 +38,21 @@ val it: HigherFun.value =
 ```
 
 By providing ```2``` to the add-function, we have only partially applied the function, since it contains the ```f```-function in its body, which expects an argument ```y```. What happened in the other examples was that we called add with 2 arguments, as to propagate the second argument to the inner function ```f```. Here, we get the closure of the function ```f``` as a result, where we see that ```Int 2``` is bound to ```x```, and the function closure ```f```, that still needs an ```y``` to be completely applied. 
+
+# 6.5 part 1
+
+## Exampl2 fails 
+The error message from running the example was:
+```ParseAndType.inferType ParseAndType.exampl2;;
+System.Exception: type error: circularity```
+
+The circularity consists in the fact that g is applied to g, and we cannot know the type of g at this point. 
+
+##Exampl4 fails:
+The error message we got was
+```
+ ParseAndType.inferType ParseAndType.exampl4;;
+System.Exception: type error: bool and int
+```
+
+The issue arises because F is invoked with 42, and the function then attempts to evaluate whether the argument is 'true'. Now, while 42 is famously the answer to life, the universe, and everything, it's still an `int`. Expecting to decide if a number is 'true' is a bit optimistic. 

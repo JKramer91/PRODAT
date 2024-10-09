@@ -2,10 +2,10 @@
 
 module ParseAndType
 
-let fromString = Parse.fromString;;
+let fromString = Parse.fromString
 
-let inferType = TypeInference.inferType;;
-    
+let inferType = TypeInference.inferType
+
 (* Well-typed examples ---------------------------------------- *)
 
 (* In the let-body, f is polymorphic *)
@@ -101,7 +101,9 @@ let teex3 () =
 
 (* Example with escaling type variables and slow type interence. *)
 let slowTypeInferenceExample () =
-    inferType(fromString @"
+    inferType (
+        fromString
+            @"
 let id x = x in
   let pair x =
     let pair2 y =
@@ -131,4 +133,61 @@ let id x = x in
     end
   end
 end
-              ");;
+              "
+    )
+
+
+//6.5 I
+
+//Answers are in Answers.md
+let exampl1 =
+    (fromString
+        "let f x = 1 
+                 in f f end")
+
+let exampl2 =
+    (fromString
+        "let f g = g g 
+                 in f end") //This one fails. Circularity.
+
+let exampl3 =
+    (fromString
+        "let f x =
+                    let g y = y
+                    in g false end
+                 in f 42 end")
+
+let exampl4 =
+    (fromString
+        "let f x =
+                    let g y = if true then y else x
+                    in g false end 
+                 in f 42 end") //This one fails. Type error.
+
+let exampl5 =
+    (fromString
+        "let f x =
+                    let g y = if true then y else x
+                    in g false end
+                 in f true end")
+
+
+//6.5 II
+let ex_bool_to_bool =
+    (fromString "let f x = if x = true then true else false in f end")
+
+let ex_int_to_int = (fromString "let f x = x+2 in f end")
+
+let ex_int_to_int_to_int =
+    (fromString "let f x = let g y = x - y in g end in f end")
+
+let ex_a_to_b_to_a = (fromString "let f x = let g y = x in g end in f end")
+
+let ex_a_to_b_to_b = (fromString "let f x = let g y = y in g end in f end")
+
+let ex_ab2bc2ac =
+    (fromString "let f x = let g y = let h z = y (x z) in h end in g end in f end")
+
+let ex_a_to_b = (fromString "let f x = let g = f x in g end in f end")
+
+let ex_a = (fromString "let f x = f true in f false end")

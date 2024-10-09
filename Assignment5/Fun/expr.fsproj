@@ -16,6 +16,8 @@
     <Compile Include="HigherFun.fs" />
     <Compile Include="Parse.fs" />
     <Compile Include="ParseAndRun.fs" />
+    <Compile Include="TypeInference.fs" />
+    <Compile Include="ParseAndType.fs" />
     <Compile Include="ParseAndRunHigher.fs" />
   </ItemGroup>
 

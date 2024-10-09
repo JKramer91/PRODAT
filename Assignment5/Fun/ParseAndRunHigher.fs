@@ -89,6 +89,7 @@ let ex13 =
         @"let add x = let f y = x+y in f end
           in add 2 end"
 
+//6.3 examples
 let ex14 =
     fromString
         @"let add x = fun y -> x + y
