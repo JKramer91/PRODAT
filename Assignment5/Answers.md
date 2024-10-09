@@ -39,6 +39,15 @@ val it: HigherFun.value =
 
 By providing ```2``` to the add-function, we have only partially applied the function, since it contains the ```f```-function in its body, which expects an argument ```y```. What happened in the other examples was that we called add with 2 arguments, as to propagate the second argument to the inner function ```f```. Here, we get the closure of the function ```f``` as a result, where we see that ```Int 2``` is bound to ```x```, and the function closure ```f```, that still needs an ```y``` to be completely applied. 
 
+# 6.4 Type trees:
+## a 
+![Image](./Images/Proof1.jpg)
+
+## b 
+![Image](./Images/Proof2Hihi.jpg)
+
+
+
 # 6.5 part 1
 
 ## Exampl2 fails 
