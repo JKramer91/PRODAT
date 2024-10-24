@@ -1,5 +1,5 @@
 {
- (* File MicroC/CLex.lex
+ (* File CLex.lex
     Lexer specification for micro-C, a small imperative language
   *)
 
@@ -27,7 +27,8 @@ let keyword s =
     | "return"  -> RETURN
     | "true"    -> CSTBOOL 1
     | "void"    -> VOID 
-    | "while"   -> WHILE         
+    | "while"   -> WHILE       
+    | "for"     -> FOR    
     | _         -> NAME s
  
 let cEscape s = 

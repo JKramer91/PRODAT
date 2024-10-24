@@ -6,7 +6,7 @@ module CPar
 open FSharp.Text.Lexing
 open FSharp.Text.Parsing.ParseHelpers
 
-(*	File MicroC/CPar.fsy 
+(*	File CPar.fsy 
 	Parser specification for micro-C, a small imperative language
 	sestoft@itu.dk * 2009-09-29
 	No (real) shift/reduce conflicts thanks to Niels Kokholm.
@@ -54,6 +54,7 @@ type token =
     | RETURN
     | VOID
     | WHILE
+    | FOR
     | CSTSTRING of (string)
     | NAME of (string)
     | CSTINT of (int)
@@ -95,6 +96,7 @@ type tokenId =
     | TOKEN_RETURN
     | TOKEN_VOID
     | TOKEN_WHILE
+    | TOKEN_FOR
     | TOKEN_CSTSTRING
     | TOKEN_NAME
     | TOKEN_CSTINT
@@ -164,10 +166,11 @@ let tagOfToken (t: token) =
     | RETURN -> 32
     | VOID -> 33
     | WHILE -> 34
-    | CSTSTRING _ -> 35
-    | NAME _ -> 36
-    | CSTINT _ -> 37
-    | CSTBOOL _ -> 38
+    | FOR -> 35
+    | CSTSTRING _ -> 36
+    | NAME _ -> 37
+    | CSTINT _ -> 38
+    | CSTBOOL _ -> 39
 
 // This function maps integer indexes to symbolic token ids
 let tokenTagToTokenId (tokenIdx: int) =
@@ -207,12 +210,13 @@ let tokenTagToTokenId (tokenIdx: int) =
     | 32 -> TOKEN_RETURN
     | 33 -> TOKEN_VOID
     | 34 -> TOKEN_WHILE
-    | 35 -> TOKEN_CSTSTRING
-    | 36 -> TOKEN_NAME
-    | 37 -> TOKEN_CSTINT
-    | 38 -> TOKEN_CSTBOOL
-    | 41 -> TOKEN_end_of_input
-    | 39 -> TOKEN_error
+    | 35 -> TOKEN_FOR
+    | 36 -> TOKEN_CSTSTRING
+    | 37 -> TOKEN_NAME
+    | 38 -> TOKEN_CSTINT
+    | 39 -> TOKEN_CSTBOOL
+    | 42 -> TOKEN_end_of_input
+    | 40 -> TOKEN_error
     | _ -> failwith "tokenTagToTokenId: bad token"
 
 /// This function maps production indexes returned in syntax errors to strings representing the non terminal that would be produced by that production
@@ -248,12 +252,12 @@ let prodIdxToNonTerminal (prodIdx: int) =
     | 27 -> NONTERM_StmtM
     | 28 -> NONTERM_StmtM
     | 29 -> NONTERM_StmtM
-    | 30 -> NONTERM_StmtU
+    | 30 -> NONTERM_StmtM
     | 31 -> NONTERM_StmtU
     | 32 -> NONTERM_StmtU
-    | 33 -> NONTERM_Expr
+    | 33 -> NONTERM_StmtU
     | 34 -> NONTERM_Expr
-    | 35 -> NONTERM_ExprNotAccess
+    | 35 -> NONTERM_Expr
     | 36 -> NONTERM_ExprNotAccess
     | 37 -> NONTERM_ExprNotAccess
     | 38 -> NONTERM_ExprNotAccess
@@ -272,28 +276,29 @@ let prodIdxToNonTerminal (prodIdx: int) =
     | 51 -> NONTERM_ExprNotAccess
     | 52 -> NONTERM_ExprNotAccess
     | 53 -> NONTERM_ExprNotAccess
-    | 54 -> NONTERM_AtExprNotAccess
+    | 54 -> NONTERM_ExprNotAccess
     | 55 -> NONTERM_AtExprNotAccess
     | 56 -> NONTERM_AtExprNotAccess
-    | 57 -> NONTERM_Access
+    | 57 -> NONTERM_AtExprNotAccess
     | 58 -> NONTERM_Access
     | 59 -> NONTERM_Access
     | 60 -> NONTERM_Access
     | 61 -> NONTERM_Access
-    | 62 -> NONTERM_Exprs
+    | 62 -> NONTERM_Access
     | 63 -> NONTERM_Exprs
-    | 64 -> NONTERM_Exprs1
+    | 64 -> NONTERM_Exprs
     | 65 -> NONTERM_Exprs1
-    | 66 -> NONTERM_Const
+    | 66 -> NONTERM_Exprs1
     | 67 -> NONTERM_Const
     | 68 -> NONTERM_Const
     | 69 -> NONTERM_Const
-    | 70 -> NONTERM_Type
+    | 70 -> NONTERM_Const
     | 71 -> NONTERM_Type
+    | 72 -> NONTERM_Type
     | _ -> failwith "prodIdxToNonTerminal: bad production index"
 
-let _fsyacc_endOfInputTag = 41
-let _fsyacc_tagOfErrorTerminal = 39
+let _fsyacc_endOfInputTag = 42
+let _fsyacc_tagOfErrorTerminal = 40
 
 // This function gets the name of a token as a string
 let token_to_string (t: token) =
@@ -333,6 +338,7 @@ let token_to_string (t: token) =
     | RETURN -> "RETURN"
     | VOID -> "VOID"
     | WHILE -> "WHILE"
+    | FOR -> "FOR"
     | CSTSTRING _ -> "CSTSTRING"
     | NAME _ -> "NAME"
     | CSTINT _ -> "CSTINT"
@@ -376,6 +382,7 @@ let _fsyacc_dataOfToken (t: token) =
     | RETURN -> (null: System.Object)
     | VOID -> (null: System.Object)
     | WHILE -> (null: System.Object)
+    | FOR -> (null: System.Object)
     | CSTSTRING _fsyacc_x -> Microsoft.FSharp.Core.Operators.box _fsyacc_x
     | NAME _fsyacc_x -> Microsoft.FSharp.Core.Operators.box _fsyacc_x
     | CSTINT _fsyacc_x -> Microsoft.FSharp.Core.Operators.box _fsyacc_x
@@ -448,7 +455,7 @@ let _fsyacc_gotos =
        33us
        35us
        36us
-       8us
+       9us
        65535us
        27us
        28us
@@ -466,6 +473,8 @@ let _fsyacc_gotos =
        54us
        64us
        54us
+       73us
+       54us
        3us
        65535us
        37us
@@ -474,7 +483,7 @@ let _fsyacc_gotos =
        41us
        43us
        44us
-       4us
+       5us
        65535us
        37us
        40us
@@ -483,8 +492,10 @@ let _fsyacc_gotos =
        43us
        40us
        58us
-       67us
-       6us
+       76us
+       73us
+       74us
+       7us
        65535us
        37us
        45us
@@ -498,7 +509,9 @@ let _fsyacc_gotos =
        60us
        64us
        65us
-       6us
+       73us
+       45us
+       7us
        65535us
        37us
        47us
@@ -509,10 +522,12 @@ let _fsyacc_gotos =
        58us
        47us
        59us
-       66us
+       75us
        64us
-       68us
-       29us
+       77us
+       73us
+       47us
+       33us
        65535us
        37us
        48us
@@ -532,32 +547,22 @@ let _fsyacc_gotos =
        63us
        64us
        48us
-       74us
-       75us
-       77us
-       100us
-       80us
-       81us
-       82us
+       67us
+       68us
+       69us
+       70us
+       71us
+       72us
+       73us
+       48us
        83us
-       101us
-       85us
-       102us
+       84us
        86us
-       103us
-       87us
-       104us
-       88us
-       105us
-       89us
-       106us
-       90us
-       107us
-       91us
-       108us
-       92us
        109us
-       93us
+       89us
+       90us
+       91us
+       92us
        110us
        94us
        111us
@@ -565,273 +570,323 @@ let _fsyacc_gotos =
        112us
        96us
        113us
+       97us
+       114us
        98us
        115us
-       97us
-       126us
        99us
-       129us
+       116us
        100us
-       29us
-       65535us
-       37us
-       71us
-       40us
-       71us
-       43us
-       71us
-       50us
-       71us
-       56us
-       71us
-       58us
-       71us
-       59us
-       71us
-       62us
-       71us
-       64us
-       71us
-       74us
-       71us
-       77us
-       71us
-       80us
-       71us
-       82us
-       71us
-       101us
-       71us
-       102us
-       71us
-       103us
-       71us
-       104us
-       71us
-       105us
-       71us
-       106us
-       71us
-       107us
-       71us
-       108us
-       71us
-       109us
-       71us
-       110us
-       71us
-       111us
-       71us
-       112us
-       71us
-       113us
-       71us
-       115us
-       72us
-       126us
-       71us
-       129us
-       71us
-       30us
-       65535us
-       37us
-       73us
-       40us
-       73us
-       43us
-       73us
-       50us
-       73us
-       56us
-       73us
-       58us
-       73us
-       59us
-       73us
-       62us
-       73us
-       64us
-       73us
-       74us
-       73us
-       77us
-       73us
-       80us
-       73us
-       82us
-       73us
-       101us
-       73us
-       102us
-       73us
-       103us
-       73us
-       104us
-       73us
-       105us
-       73us
-       106us
-       73us
-       107us
-       73us
-       108us
-       73us
-       109us
-       73us
-       110us
-       73us
-       111us
-       73us
-       112us
-       73us
-       113us
-       73us
-       115us
-       73us
-       123us
-       125us
-       126us
-       73us
-       129us
-       73us
-       32us
-       65535us
-       37us
-       70us
-       40us
-       70us
-       43us
-       70us
-       50us
-       70us
-       56us
-       70us
-       58us
-       70us
-       59us
-       70us
-       62us
-       70us
-       64us
-       70us
-       74us
-       70us
-       77us
-       70us
-       80us
-       70us
-       82us
-       70us
-       101us
-       70us
-       102us
-       70us
-       103us
-       70us
-       104us
-       70us
-       105us
-       70us
-       106us
-       70us
-       107us
-       70us
-       108us
-       70us
-       109us
-       70us
-       110us
-       70us
-       111us
-       70us
-       112us
-       70us
-       113us
-       70us
-       115us
-       69us
        117us
+       101us
        118us
+       102us
+       119us
+       103us
        120us
+       104us
        121us
-       123us
+       105us
+       122us
+       107us
        124us
-       126us
-       70us
-       129us
-       70us
-       1us
+       106us
+       135us
+       108us
+       138us
+       109us
+       33us
        65535us
-       77us
+       37us
+       80us
+       40us
+       80us
+       43us
+       80us
+       50us
+       80us
+       56us
+       80us
+       58us
+       80us
+       59us
+       80us
+       62us
+       80us
+       64us
+       80us
+       67us
+       80us
+       69us
+       80us
+       71us
+       80us
+       73us
+       80us
+       83us
+       80us
+       86us
+       80us
+       89us
+       80us
+       91us
+       80us
+       110us
+       80us
+       111us
+       80us
+       112us
+       80us
+       113us
+       80us
+       114us
+       80us
+       115us
+       80us
+       116us
+       80us
+       117us
+       80us
+       118us
+       80us
+       119us
+       80us
+       120us
+       80us
+       121us
+       80us
+       122us
+       80us
+       124us
+       81us
+       135us
+       80us
+       138us
+       80us
+       34us
+       65535us
+       37us
+       82us
+       40us
+       82us
+       43us
+       82us
+       50us
+       82us
+       56us
+       82us
+       58us
+       82us
+       59us
+       82us
+       62us
+       82us
+       64us
+       82us
+       67us
+       82us
+       69us
+       82us
+       71us
+       82us
+       73us
+       82us
+       83us
+       82us
+       86us
+       82us
+       89us
+       82us
+       91us
+       82us
+       110us
+       82us
+       111us
+       82us
+       112us
+       82us
+       113us
+       82us
+       114us
+       82us
+       115us
+       82us
+       116us
+       82us
+       117us
+       82us
+       118us
+       82us
+       119us
+       82us
+       120us
+       82us
+       121us
+       82us
+       122us
+       82us
+       124us
+       82us
+       132us
+       134us
+       135us
+       82us
+       138us
+       82us
+       36us
+       65535us
+       37us
+       79us
+       40us
+       79us
+       43us
+       79us
+       50us
+       79us
+       56us
+       79us
+       58us
+       79us
+       59us
+       79us
+       62us
+       79us
+       64us
+       79us
+       67us
+       79us
+       69us
+       79us
+       71us
+       79us
+       73us
+       79us
+       83us
+       79us
+       86us
+       79us
+       89us
+       79us
+       91us
+       79us
+       110us
+       79us
+       111us
+       79us
+       112us
+       79us
+       113us
+       79us
+       114us
+       79us
+       115us
+       79us
+       116us
+       79us
+       117us
+       79us
+       118us
+       79us
+       119us
+       79us
+       120us
+       79us
+       121us
+       79us
+       122us
+       79us
+       124us
        78us
-       2us
-       65535us
-       77us
-       128us
+       126us
+       127us
        129us
        130us
-       30us
+       132us
+       133us
+       135us
+       79us
+       138us
+       79us
+       1us
+       65535us
+       86us
+       87us
+       2us
+       65535us
+       86us
+       137us
+       138us
+       139us
+       34us
        65535us
        37us
-       114us
+       123us
        40us
-       114us
+       123us
        43us
-       114us
+       123us
        50us
-       114us
+       123us
        56us
-       114us
+       123us
        58us
-       114us
+       123us
        59us
-       114us
+       123us
        62us
-       114us
+       123us
        64us
-       114us
-       74us
-       114us
-       77us
-       114us
-       80us
-       114us
-       82us
-       114us
-       101us
-       114us
-       102us
-       114us
-       103us
-       114us
-       104us
-       114us
-       105us
-       114us
-       106us
-       114us
-       107us
-       114us
-       108us
-       114us
-       109us
-       114us
+       123us
+       67us
+       123us
+       69us
+       123us
+       71us
+       123us
+       73us
+       123us
+       83us
+       123us
+       86us
+       123us
+       89us
+       123us
+       91us
+       123us
        110us
-       114us
+       123us
        111us
-       114us
+       123us
        112us
-       114us
+       123us
        113us
-       114us
-       115us
-       114us
        123us
        114us
-       126us
-       114us
-       129us
-       114us
+       123us
+       115us
+       123us
+       116us
+       123us
+       117us
+       123us
+       118us
+       123us
+       119us
+       123us
+       120us
+       123us
+       121us
+       123us
+       122us
+       123us
+       124us
+       123us
+       132us
+       123us
+       135us
+       123us
+       138us
+       123us
        8us
        65535us
        0us
@@ -862,18 +917,18 @@ let _fsyacc_sparseGotoTableRowOffsets =
        26us
        29us
        33us
-       42us
-       46us
-       51us
-       58us
-       65us
-       95us
-       125us
-       156us
-       189us
-       191us
-       194us
-       225us |]
+       43us
+       47us
+       53us
+       61us
+       69us
+       103us
+       137us
+       172us
+       209us
+       211us
+       214us
+       249us |]
 
 let _fsyacc_stateToProdIdxsTableElements =
     [| 1us
@@ -981,12 +1036,11 @@ let _fsyacc_stateToProdIdxsTableElements =
        3us
        22us
        28us
-       30us
+       31us
        1us
        23us
        14us
        24us
-       41us
        42us
        43us
        44us
@@ -999,6 +1053,7 @@ let _fsyacc_stateToProdIdxsTableElements =
        51us
        52us
        53us
+       54us
        1us
        24us
        2us
@@ -1008,7 +1063,6 @@ let _fsyacc_stateToProdIdxsTableElements =
        25us
        14us
        26us
-       41us
        42us
        43us
        44us
@@ -1021,23 +1075,23 @@ let _fsyacc_stateToProdIdxsTableElements =
        51us
        52us
        53us
+       54us
        1us
        26us
        1us
        27us
        3us
        28us
-       30us
        31us
+       32us
        3us
        28us
-       30us
        31us
+       32us
        16us
        28us
-       30us
        31us
-       41us
+       32us
        42us
        43us
        44us
@@ -1050,25 +1104,25 @@ let _fsyacc_stateToProdIdxsTableElements =
        51us
        52us
        53us
+       54us
        3us
        28us
-       30us
        31us
+       32us
        2us
        28us
-       30us
+       31us
        1us
        28us
        2us
        29us
-       32us
+       33us
        2us
        29us
-       32us
+       33us
        15us
        29us
-       32us
-       41us
+       33us
        42us
        43us
        44us
@@ -1081,64 +1135,95 @@ let _fsyacc_stateToProdIdxsTableElements =
        51us
        52us
        53us
+       54us
        2us
        29us
-       32us
+       33us
        1us
        29us
+       1us
+       30us
+       1us
+       30us
+       14us
+       30us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       1us
+       30us
+       14us
+       30us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       1us
+       30us
+       14us
+       30us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       1us
+       30us
        1us
        30us
        1us
        31us
        1us
        32us
-       4us
-       33us
-       36us
-       58us
-       61us
-       3us
-       33us
-       36us
-       61us
        1us
+       33us
+       4us
        34us
-       2us
+       37us
+       59us
+       62us
+       3us
        34us
-       55us
+       37us
+       62us
        1us
        35us
-       1us
-       36us
-       14us
-       36us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
        2us
-       37us
-       57us
+       35us
+       56us
+       1us
+       36us
        1us
        37us
-       1us
-       37us
-       1us
-       37us
-       1us
-       38us
        14us
-       38us
-       41us
+       37us
        42us
        43us
        44us
@@ -1151,11 +1236,20 @@ let _fsyacc_stateToProdIdxsTableElements =
        51us
        52us
        53us
+       54us
+       2us
+       38us
+       58us
+       1us
+       38us
+       1us
+       38us
+       1us
+       38us
        1us
        39us
        14us
        39us
-       41us
        42us
        43us
        44us
@@ -1168,11 +1262,11 @@ let _fsyacc_stateToProdIdxsTableElements =
        51us
        52us
        53us
+       54us
        1us
        40us
        14us
-       41us
-       41us
+       40us
        42us
        43us
        44us
@@ -1185,233 +1279,249 @@ let _fsyacc_stateToProdIdxsTableElements =
        51us
        52us
        53us
-       14us
-       41us
-       42us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       52us
-       53us
-       13us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       53us
-       14us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       61us
-       15us
-       41us
-       42us
-       43us
-       44us
-       45us
-       46us
-       47us
-       48us
-       49us
-       50us
-       51us
-       52us
-       53us
-       64us
-       65us
+       54us
        1us
        41us
+       14us
+       42us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       53us
+       54us
+       13us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       54us
+       14us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       62us
+       15us
+       42us
+       43us
+       44us
+       45us
+       46us
+       47us
+       48us
+       49us
+       50us
+       51us
+       52us
+       53us
+       54us
+       65us
+       66us
        1us
        42us
        1us
@@ -1438,43 +1548,43 @@ let _fsyacc_stateToProdIdxsTableElements =
        53us
        1us
        54us
-       2us
-       55us
-       58us
        1us
        55us
-       1us
-       56us
        2us
        56us
-       61us
+       59us
+       1us
+       56us
        1us
        57us
-       1us
-       58us
        2us
-       58us
-       61us
+       57us
+       62us
        1us
        58us
+       1us
+       59us
        2us
        59us
-       60us
-       2us
+       62us
+       1us
        59us
-       61us
-       1us
+       2us
        60us
+       61us
+       2us
+       60us
+       62us
        1us
        61us
        1us
-       61us
+       62us
        1us
-       63us
+       62us
        1us
-       65us
+       64us
        1us
-       65us
+       66us
        1us
        66us
        1us
@@ -1482,13 +1592,15 @@ let _fsyacc_stateToProdIdxsTableElements =
        1us
        68us
        1us
-       68us
+       69us
        1us
        69us
        1us
        70us
        1us
-       71us |]
+       71us
+       1us
+       72us |]
 
 let _fsyacc_stateToProdIdxsTableRowOffsets =
     [| 0us
@@ -1560,64 +1672,47 @@ let _fsyacc_stateToProdIdxsTableRowOffsets =
        210us
        212us
        214us
-       216us
-       221us
-       225us
-       227us
-       230us
-       232us
-       234us
-       249us
-       252us
-       254us
-       256us
-       258us
-       260us
-       275us
-       277us
-       292us
-       294us
+       229us
+       231us
+       246us
+       248us
+       263us
+       265us
+       267us
+       269us
+       271us
+       273us
+       278us
+       282us
+       284us
+       287us
+       289us
+       291us
+       306us
        309us
-       324us
-       339us
-       354us
-       369us
-       384us
-       399us
-       414us
-       429us
-       444us
-       459us
-       474us
-       488us
-       503us
-       518us
-       534us
-       536us
-       538us
-       540us
-       542us
-       544us
-       546us
-       548us
-       550us
-       552us
-       554us
-       556us
-       558us
+       311us
+       313us
+       315us
+       317us
+       332us
+       334us
+       349us
+       351us
+       366us
+       381us
+       396us
+       411us
+       426us
+       441us
+       456us
+       471us
+       486us
+       501us
+       516us
+       531us
+       545us
        560us
-       562us
-       565us
-       567us
-       569us
-       572us
-       574us
-       576us
-       579us
-       581us
-       584us
-       587us
-       589us
+       575us
        591us
        593us
        595us
@@ -1628,17 +1723,43 @@ let _fsyacc_stateToProdIdxsTableRowOffsets =
        605us
        607us
        609us
-       611us |]
+       611us
+       613us
+       615us
+       617us
+       619us
+       622us
+       624us
+       626us
+       629us
+       631us
+       633us
+       636us
+       638us
+       641us
+       644us
+       646us
+       648us
+       650us
+       652us
+       654us
+       656us
+       658us
+       660us
+       662us
+       664us
+       666us
+       668us |]
 
-let _fsyacc_action_rows = 138
+let _fsyacc_action_rows = 147
 
 let _fsyacc_actionTableElements =
     [| 3us
        16386us
        25us
-       137us
+       146us
        28us
-       136us
+       145us
        33us
        23us
        0us
@@ -1652,9 +1773,9 @@ let _fsyacc_actionTableElements =
        3us
        16386us
        25us
-       137us
+       146us
        28us
-       136us
+       145us
        33us
        23us
        0us
@@ -1673,7 +1794,7 @@ let _fsyacc_actionTableElements =
        16us
        22us
        14us
-       36us
+       37us
        12us
        3us
        32768us
@@ -1681,7 +1802,7 @@ let _fsyacc_actionTableElements =
        16us
        22us
        14us
-       36us
+       37us
        13us
        1us
        16390us
@@ -1699,7 +1820,7 @@ let _fsyacc_actionTableElements =
        16us
        22us
        14us
-       36us
+       37us
        12us
        1us
        16392us
@@ -1711,7 +1832,7 @@ let _fsyacc_actionTableElements =
        16us
        22us
        14us
-       36us
+       37us
        12us
        2us
        32768us
@@ -1725,7 +1846,7 @@ let _fsyacc_actionTableElements =
        32768us
        6us
        20us
-       37us
+       38us
        21us
        0us
        16394us
@@ -1737,7 +1858,7 @@ let _fsyacc_actionTableElements =
        16395us
        1us
        32768us
-       36us
+       37us
        24us
        1us
        32768us
@@ -1746,9 +1867,9 @@ let _fsyacc_actionTableElements =
        2us
        16398us
        25us
-       137us
+       146us
        28us
-       136us
+       145us
        1us
        32768us
        2us
@@ -1762,9 +1883,9 @@ let _fsyacc_actionTableElements =
        2us
        16398us
        25us
-       137us
+       146us
        28us
-       136us
+       145us
        1us
        32768us
        2us
@@ -1784,131 +1905,137 @@ let _fsyacc_actionTableElements =
        2us
        32768us
        25us
-       137us
+       146us
        28us
-       136us
+       145us
        0us
        16401us
-       17us
+       18us
        16403us
        1us
-       115us
+       124us
        3us
        37us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
+       132us
        25us
-       137us
+       146us
        27us
        55us
        28us
-       136us
+       145us
        29us
-       135us
+       144us
        30us
-       82us
+       91us
        31us
-       84us
+       93us
        32us
        50us
        34us
        61us
-       36us
-       76us
+       35us
+       66us
        37us
-       131us
+       85us
        38us
-       132us
+       140us
+       39us
+       141us
        1us
        32768us
        4us
        39us
        0us
        16402us
-       17us
+       18us
        16403us
        1us
-       115us
+       124us
        3us
        37us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
+       132us
        25us
-       137us
+       146us
        27us
        55us
        28us
-       136us
+       145us
        29us
-       135us
+       144us
        30us
-       82us
+       91us
        31us
-       84us
+       93us
        32us
        50us
        34us
        61us
-       36us
-       76us
+       35us
+       66us
        37us
-       131us
+       85us
        38us
-       132us
+       140us
+       39us
+       141us
        0us
        16404us
        1us
        32768us
        7us
        43us
-       17us
+       18us
        16403us
        1us
-       115us
+       124us
        3us
        37us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
+       132us
        25us
-       137us
+       146us
        27us
        55us
        28us
-       136us
+       145us
        29us
-       135us
+       144us
        30us
-       82us
+       91us
        31us
-       84us
+       93us
        32us
        50us
        34us
        61us
-       36us
-       76us
+       35us
+       66us
        37us
-       131us
+       85us
        38us
-       132us
+       140us
+       39us
+       141us
        0us
        16405us
        0us
@@ -1924,59 +2051,59 @@ let _fsyacc_actionTableElements =
        7us
        49us
        12us
-       113us
+       122us
        13us
-       112us
+       121us
        14us
-       106us
+       115us
        15us
-       107us
+       116us
        16us
-       108us
+       117us
        17us
-       109us
+       118us
        18us
-       110us
+       119us
        19us
-       111us
+       120us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
        0us
        16408us
        12us
        32768us
        1us
-       115us
+       124us
        7us
        51us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        0us
        16409us
        14us
@@ -1984,31 +2111,31 @@ let _fsyacc_actionTableElements =
        7us
        53us
        12us
-       113us
+       122us
        13us
-       112us
+       121us
        14us
-       106us
+       115us
        15us
-       107us
+       116us
        16us
-       108us
+       117us
        17us
-       109us
+       118us
        18us
-       110us
+       119us
        19us
-       111us
+       120us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
        0us
        16410us
        0us
@@ -2020,121 +2147,125 @@ let _fsyacc_actionTableElements =
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        14us
        32768us
        2us
        58us
        12us
-       113us
+       122us
        13us
-       112us
+       121us
        14us
-       106us
+       115us
        15us
-       107us
+       116us
        16us
-       108us
+       117us
        17us
-       109us
+       118us
        18us
-       110us
+       119us
        19us
-       111us
+       120us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
-       15us
+       114us
+       16us
        32768us
        1us
-       115us
+       124us
        3us
        37us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
+       132us
        27us
        55us
        29us
-       135us
+       144us
        30us
-       82us
+       91us
        31us
-       84us
+       93us
        32us
        50us
        34us
        61us
-       36us
-       76us
+       35us
+       66us
        37us
-       131us
+       85us
        38us
-       132us
-       15us
+       140us
+       39us
+       141us
+       16us
        32768us
        1us
-       115us
+       124us
        3us
        37us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
+       132us
        27us
        55us
        29us
-       135us
+       144us
        30us
-       82us
+       91us
        31us
-       84us
+       93us
        32us
        50us
        34us
        61us
-       36us
-       76us
+       35us
+       66us
        37us
-       131us
+       85us
        38us
-       132us
+       140us
+       39us
+       141us
        0us
        16412us
        1us
@@ -2144,997 +2275,1201 @@ let _fsyacc_actionTableElements =
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        14us
        32768us
        2us
        64us
        12us
-       113us
+       122us
        13us
-       112us
+       121us
        14us
-       106us
+       115us
        15us
-       107us
+       116us
        16us
-       108us
+       117us
        17us
-       109us
+       118us
        18us
-       110us
+       119us
        19us
-       111us
+       120us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
-       15us
+       114us
+       16us
        32768us
        1us
-       115us
+       124us
        3us
        37us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
+       132us
        27us
        55us
        29us
-       135us
+       144us
        30us
-       82us
+       91us
        31us
-       84us
+       93us
        32us
        50us
        34us
        61us
-       36us
-       76us
+       35us
+       66us
        37us
-       131us
+       85us
        38us
-       132us
+       140us
+       39us
+       141us
        0us
        16413us
+       1us
+       32768us
+       1us
+       67us
+       11us
+       32768us
+       1us
+       124us
+       10us
+       126us
+       11us
+       89us
+       21us
+       142us
+       22us
+       132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
+       14us
+       32768us
+       7us
+       69us
+       12us
+       122us
+       13us
+       121us
+       14us
+       115us
+       15us
+       116us
+       16us
+       117us
+       17us
+       118us
+       18us
+       119us
+       19us
+       120us
+       20us
+       110us
+       21us
+       111us
+       22us
+       112us
+       23us
+       113us
+       24us
+       114us
+       11us
+       32768us
+       1us
+       124us
+       10us
+       126us
+       11us
+       89us
+       21us
+       142us
+       22us
+       132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
+       14us
+       32768us
+       7us
+       71us
+       12us
+       122us
+       13us
+       121us
+       14us
+       115us
+       15us
+       116us
+       16us
+       117us
+       17us
+       118us
+       18us
+       119us
+       19us
+       120us
+       20us
+       110us
+       21us
+       111us
+       22us
+       112us
+       23us
+       113us
+       24us
+       114us
+       11us
+       32768us
+       1us
+       124us
+       10us
+       126us
+       11us
+       89us
+       21us
+       142us
+       22us
+       132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
+       14us
+       32768us
+       2us
+       73us
+       12us
+       122us
+       13us
+       121us
+       14us
+       115us
+       15us
+       116us
+       16us
+       117us
+       17us
+       118us
+       18us
+       119us
+       19us
+       120us
+       20us
+       110us
+       21us
+       111us
+       22us
+       112us
+       23us
+       113us
+       24us
+       114us
+       16us
+       32768us
+       1us
+       124us
+       3us
+       37us
+       10us
+       126us
+       11us
+       89us
+       21us
+       142us
+       22us
+       132us
+       27us
+       55us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       32us
+       50us
+       34us
+       61us
+       35us
+       66us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        0us
        16414us
        0us
        16415us
        0us
        16416us
-       3us
-       16417us
-       2us
-       122us
-       5us
-       126us
-       9us
-       74us
-       2us
-       16417us
-       5us
-       126us
-       9us
-       74us
        0us
-       16418us
-       1us
+       16417us
+       3us
        16418us
        2us
-       116us
+       131us
+       5us
+       135us
+       9us
+       83us
+       2us
+       16418us
+       5us
+       135us
+       9us
+       83us
        0us
        16419us
+       1us
+       16419us
+       2us
+       125us
+       0us
+       16420us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        13us
-       16420us
+       16421us
        12us
-       113us
+       122us
        13us
-       112us
+       121us
        14us
-       106us
-       15us
-       107us
-       16us
-       108us
-       17us
-       109us
-       18us
-       110us
-       19us
-       111us
-       20us
-       101us
-       21us
-       102us
-       22us
-       103us
-       23us
-       104us
-       24us
-       105us
-       1us
-       16441us
-       1us
-       77us
-       11us
-       16446us
-       1us
        115us
-       10us
+       15us
+       116us
+       16us
        117us
-       11us
-       80us
+       17us
+       118us
+       18us
+       119us
+       19us
+       120us
+       20us
+       110us
        21us
-       133us
+       111us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
+       112us
+       23us
+       113us
+       24us
+       114us
+       1us
+       16442us
+       1us
+       86us
+       11us
+       16447us
+       1us
+       124us
+       10us
+       126us
+       11us
+       89us
+       21us
+       142us
+       22us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        1us
        32768us
        2us
-       79us
-       0us
-       16421us
-       11us
-       32768us
-       1us
-       115us
-       10us
-       117us
-       11us
-       80us
-       21us
-       133us
-       22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
-       132us
+       88us
        0us
        16422us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
-       13us
-       16423us
-       12us
-       113us
-       13us
-       112us
-       14us
-       106us
-       15us
-       107us
-       16us
-       108us
-       17us
-       109us
-       18us
-       110us
-       19us
-       111us
-       20us
-       101us
-       21us
-       102us
-       22us
-       103us
-       23us
-       104us
-       24us
-       105us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        0us
-       16424us
-       3us
-       16425us
+       16423us
+       11us
+       32768us
+       1us
+       124us
+       10us
+       126us
+       11us
+       89us
+       21us
+       142us
        22us
-       103us
+       132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
+       13us
+       16424us
+       12us
+       122us
+       13us
+       121us
+       14us
+       115us
+       15us
+       116us
+       16us
+       117us
+       17us
+       118us
+       18us
+       119us
+       19us
+       120us
+       20us
+       110us
+       21us
+       111us
+       22us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
+       0us
+       16425us
        3us
        16426us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
-       0us
+       114us
+       3us
        16427us
+       22us
+       112us
+       23us
+       113us
+       24us
+       114us
        0us
        16428us
        0us
        16429us
-       9us
+       0us
        16430us
-       16us
-       108us
-       17us
-       109us
-       18us
-       110us
-       19us
-       111us
-       20us
-       101us
-       21us
-       102us
-       22us
-       103us
-       23us
-       104us
-       24us
-       105us
        9us
        16431us
        16us
-       108us
+       117us
        17us
-       109us
+       118us
        18us
-       110us
+       119us
        19us
+       120us
+       20us
+       110us
+       21us
        111us
-       20us
-       101us
-       21us
-       102us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
-       5us
+       114us
+       9us
        16432us
+       16us
+       117us
+       17us
+       118us
+       18us
+       119us
+       19us
+       120us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
        5us
        16433us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
        5us
        16434us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
        5us
        16435us
        20us
-       101us
-       21us
-       102us
-       22us
-       103us
-       23us
-       104us
-       24us
-       105us
-       11us
-       16436us
-       14us
-       106us
-       15us
-       107us
-       16us
-       108us
-       17us
-       109us
-       18us
        110us
-       19us
-       111us
-       20us
-       101us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
+       5us
+       16436us
+       20us
+       110us
+       21us
+       111us
+       22us
+       112us
+       23us
+       113us
+       24us
+       114us
+       11us
+       16437us
+       14us
+       115us
+       15us
+       116us
+       16us
+       117us
+       17us
+       118us
+       18us
+       119us
+       19us
+       120us
+       20us
+       110us
+       21us
+       111us
+       22us
+       112us
+       23us
+       113us
+       24us
+       114us
        13us
        32768us
        12us
+       122us
+       13us
+       121us
+       14us
+       115us
+       15us
+       116us
+       16us
+       117us
+       17us
+       118us
+       18us
+       119us
+       19us
+       120us
+       20us
+       110us
+       21us
+       111us
+       22us
+       112us
+       23us
        113us
-       13us
-       112us
-       14us
-       106us
-       15us
-       107us
-       16us
-       108us
-       17us
-       109us
-       18us
-       110us
-       19us
-       111us
-       20us
-       101us
-       21us
-       102us
-       22us
-       103us
-       23us
-       104us
        24us
-       105us
+       114us
        12us
-       16437us
+       16438us
        13us
-       112us
+       121us
        14us
-       106us
+       115us
        15us
-       107us
+       116us
        16us
-       108us
+       117us
        17us
-       109us
+       118us
        18us
-       110us
+       119us
        19us
-       111us
+       120us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
        14us
        32768us
        6us
-       127us
+       136us
        12us
-       113us
+       122us
        13us
-       112us
+       121us
        14us
-       106us
+       115us
        15us
-       107us
+       116us
        16us
-       108us
+       117us
        17us
-       109us
+       118us
        18us
-       110us
+       119us
        19us
-       111us
+       120us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
        14us
-       16448us
+       16449us
        8us
-       129us
+       138us
        12us
-       113us
+       122us
        13us
-       112us
+       121us
        14us
-       106us
+       115us
        15us
-       107us
+       116us
        16us
-       108us
+       117us
        17us
-       109us
+       118us
        18us
-       110us
+       119us
        19us
-       111us
+       120us
        20us
-       101us
+       110us
        21us
-       102us
+       111us
        22us
-       103us
+       112us
        23us
-       104us
+       113us
        24us
-       105us
+       114us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
-       0us
-       16438us
-       11us
-       32768us
-       1us
-       115us
-       10us
-       117us
-       11us
-       80us
-       21us
-       133us
-       22us
-       123us
        29us
-       135us
+       144us
        30us
-       82us
+       91us
        31us
-       84us
-       36us
-       76us
+       93us
        37us
-       131us
+       85us
        38us
-       132us
+       140us
+       39us
+       141us
        0us
        16439us
-       3us
+       11us
        32768us
        1us
-       120us
-       22us
-       123us
-       36us
-       119us
-       1us
-       16440us
-       5us
+       124us
+       10us
        126us
+       11us
+       89us
+       21us
+       142us
+       22us
+       132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        0us
-       16441us
+       16440us
        3us
        32768us
        1us
-       120us
+       129us
        22us
-       123us
-       36us
-       119us
-       2us
-       32768us
-       2us
-       122us
+       132us
+       37us
+       128us
+       1us
+       16441us
        5us
-       126us
+       135us
        0us
        16442us
+       3us
+       32768us
+       1us
+       129us
+       22us
+       132us
+       37us
+       128us
+       2us
+       32768us
+       2us
+       131us
+       5us
+       135us
+       0us
+       16443us
        8us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
-       21us
-       133us
-       22us
-       123us
-       29us
-       135us
-       36us
-       119us
-       37us
-       131us
-       38us
-       132us
-       1us
-       16443us
-       5us
        126us
-       0us
-       16444us
-       11us
-       32768us
-       1us
-       115us
-       10us
-       117us
-       11us
-       80us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       37us
+       128us
+       38us
+       140us
+       39us
+       141us
+       1us
+       16444us
+       5us
+       135us
        0us
        16445us
-       0us
-       16447us
        11us
        32768us
        1us
-       115us
+       124us
        10us
-       117us
+       126us
        11us
-       80us
+       89us
        21us
-       133us
+       142us
        22us
-       123us
-       29us
-       135us
-       30us
-       82us
-       31us
-       84us
-       36us
-       76us
-       37us
-       131us
-       38us
        132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        0us
-       16449us
+       16446us
+       0us
+       16448us
+       11us
+       32768us
+       1us
+       124us
+       10us
+       126us
+       11us
+       89us
+       21us
+       142us
+       22us
+       132us
+       29us
+       144us
+       30us
+       91us
+       31us
+       93us
+       37us
+       85us
+       38us
+       140us
+       39us
+       141us
        0us
        16450us
        0us
        16451us
-       1us
-       32768us
-       37us
-       134us
        0us
        16452us
+       1us
+       32768us
+       38us
+       143us
        0us
        16453us
        0us
        16454us
        0us
-       16455us |]
+       16455us
+       0us
+       16456us |]
 
 let _fsyacc_actionTableRowOffsets =
     [| 0us
@@ -3175,106 +3510,115 @@ let _fsyacc_actionTableRowOffsets =
        74us
        77us
        78us
-       96us
-       98us
+       97us
        99us
-       117us
-       118us
+       100us
+       119us
        120us
-       138us
-       139us
-       140us
+       122us
+       141us
        142us
        143us
-       158us
-       159us
-       172us
-       173us
-       188us
-       189us
-       190us
+       145us
+       146us
+       161us
+       162us
+       175us
+       176us
+       191us
        192us
-       204us
-       219us
-       235us
-       251us
-       252us
-       254us
-       266us
-       281us
-       297us
-       298us
-       299us
-       300us
-       301us
-       305us
-       308us
-       309us
-       311us
-       312us
-       324us
-       338us
-       340us
-       352us
-       354us
-       355us
-       367us
-       368us
-       380us
-       394us
-       395us
-       399us
-       403us
+       193us
+       195us
+       207us
+       222us
+       239us
+       256us
+       257us
+       259us
+       271us
+       286us
+       303us
+       304us
+       306us
+       318us
+       333us
+       345us
+       360us
+       372us
+       387us
        404us
        405us
        406us
+       407us
+       408us
+       412us
+       415us
        416us
-       426us
-       432us
-       438us
-       444us
-       450us
+       418us
+       419us
+       431us
+       445us
+       447us
+       459us
+       461us
        462us
-       476us
-       489us
-       504us
-       519us
-       531us
-       543us
-       555us
-       567us
-       579us
-       591us
-       603us
-       615us
-       627us
-       639us
-       651us
-       663us
-       675us
-       676us
-       688us
-       689us
-       693us
-       695us
-       696us
-       700us
-       703us
-       704us
-       713us
-       715us
-       716us
-       728us
-       729us
-       730us
-       742us
-       743us
-       744us
-       745us
-       747us
-       748us
-       749us
-       750us |]
+       474us
+       475us
+       487us
+       501us
+       502us
+       506us
+       510us
+       511us
+       512us
+       513us
+       523us
+       533us
+       539us
+       545us
+       551us
+       557us
+       569us
+       583us
+       596us
+       611us
+       626us
+       638us
+       650us
+       662us
+       674us
+       686us
+       698us
+       710us
+       722us
+       734us
+       746us
+       758us
+       770us
+       782us
+       783us
+       795us
+       796us
+       800us
+       802us
+       803us
+       807us
+       810us
+       811us
+       820us
+       822us
+       823us
+       835us
+       836us
+       837us
+       849us
+       850us
+       851us
+       852us
+       854us
+       855us
+       856us
+       857us |]
 
 let _fsyacc_reductionSymbolCounts =
     [| 1us
@@ -3307,6 +3651,7 @@ let _fsyacc_reductionSymbolCounts =
        1us
        7us
        5us
+       9us
        7us
        5us
        5us
@@ -3375,6 +3720,7 @@ let _fsyacc_productionToNonTerminalTable =
        10us
        11us
        11us
+       12us
        12us
        12us
        12us
@@ -3491,32 +3837,34 @@ let _fsyacc_immediateActions =
        65535us
        65535us
        16413us
+       65535us
+       65535us
+       65535us
+       65535us
+       65535us
+       65535us
+       65535us
+       65535us
        16414us
        16415us
        16416us
+       16417us
        65535us
-       65535us
-       16418us
        65535us
        16419us
        65535us
-       65535us
-       65535us
-       65535us
-       65535us
-       16421us
-       65535us
-       65535us
-       65535us
-       65535us
-       16424us
+       16420us
        65535us
        65535us
        65535us
        65535us
        65535us
+       16422us
        65535us
        65535us
+       65535us
+       65535us
+       16425us
        65535us
        65535us
        65535us
@@ -3539,30 +3887,37 @@ let _fsyacc_immediateActions =
        65535us
        65535us
        65535us
-       16438us
+       65535us
+       65535us
+       65535us
+       65535us
+       65535us
+       65535us
        65535us
        16439us
        65535us
-       65535us
-       16441us
+       16440us
        65535us
        65535us
        16442us
        65535us
        65535us
-       16444us
+       16443us
+       65535us
        65535us
        16445us
-       16447us
        65535us
-       16449us
+       16446us
+       16448us
+       65535us
        16450us
        16451us
-       65535us
        16452us
+       65535us
        16453us
        16454us
-       16455us |]
+       16455us
+       16456us |]
 
 let _fsyacc_reductions =
     lazy
@@ -3669,6 +4024,24 @@ let _fsyacc_reductions =
                let _3 = parseState.GetInput(3) :?> 'gentype_Expr in
                let _5 = parseState.GetInput(5) :?> 'gentype_StmtM in
                Microsoft.FSharp.Core.Operators.box ((While(_3, _5)): 'gentype_StmtM))
+           (fun (parseState: FSharp.Text.Parsing.IParseState) ->
+               let _3 = parseState.GetInput(3) :?> 'gentype_Expr in
+               let _5 = parseState.GetInput(5) :?> 'gentype_Expr in
+               let _7 = parseState.GetInput(7) :?> 'gentype_Expr in
+               let _9 = parseState.GetInput(9) :?> 'gentype_Stmt in
+
+               Microsoft.FSharp.Core.Operators.box (
+                   (Block
+                       [ Stmt(Expr(_3))
+                         Stmt(
+                             While(
+                                 _5,
+                                 Block[Stmt(_9)
+                                       Stmt(Expr(_7))]
+                             )
+                         ) ])
+                   : 'gentype_StmtM
+               ))
            (fun (parseState: FSharp.Text.Parsing.IParseState) ->
                let _3 = parseState.GetInput(3) :?> 'gentype_Expr in
                let _5 = parseState.GetInput(5) :?> 'gentype_StmtM in
@@ -3828,7 +4201,7 @@ let tables: FSharp.Text.Parsing.Tables<_> =
             match parse_error_rich with
             | Some f -> f ctxt
             | None -> parse_error ctxt.Message)
-      numTerminals = 42
+      numTerminals = 43
       productionToNonTerminalTable = _fsyacc_productionToNonTerminalTable }
 
 let engine lexer lexbuf startState =
