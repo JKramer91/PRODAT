@@ -12,6 +12,7 @@ A. Generating and compiling the lexer and parser for micro-C, and
    dotnet fsi -r ../../fsharp/FsLexYacc.Runtime.dll Util.fs Absyn.fs CPar.fs CLex.fs Parse.fs Interp.fs ParseAndRun.fs
 
    open ParseAndRun;;
+   
    fromFile "ex1.c";;
    run (fromFile "ex1.c") [17];;
    run (fromFile "ex5.c") [4];;
