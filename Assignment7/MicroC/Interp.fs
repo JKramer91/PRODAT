@@ -226,6 +226,13 @@ and eval e locEnv gloEnv store : int * store =
         let tmp = (getSto store1 loc)
         let tmp2 = tmp - 1
         (tmp2, setSto store1 loc tmp2)
+    | Ternary(e1, e2, e3) ->
+        let (v, store1) = eval e1 locEnv gloEnv store
+
+        if v <> 0 then
+            eval e2 locEnv gloEnv store1
+        else
+            eval e3 locEnv gloEnv store1
 
 and access acc locEnv gloEnv store : int * store =
     match acc with

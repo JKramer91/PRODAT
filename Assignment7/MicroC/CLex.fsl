@@ -78,8 +78,10 @@ rule Token = parse
   | "//"            { EndLineComment lexbuf; Token lexbuf }
   | "/*"            { Comment lexbuf; Token lexbuf }
   | '"'             { CSTSTRING (String [] lexbuf) }
-  | "++"           { INC }
+  | "++"            { INC }
   | "--"            { DEC }
+  | '?'             { CON } 
+  | ':'             { COL }
   | eof             { EOF }
   | _               { failwith "Lexer error: illegal symbol" }
 

@@ -22,8 +22,8 @@ A. Generating and compiling the lexer and parser for micro-C, and
 
 B. To compile and use the micro-C compiler
 
-   fslex --unicode CLex.fsl
-   fsyacc --module .Assignment7/MicroC/CPar .Assignment7/MicroC/CPar.fsy
+   fslex --unicode ./Assignment7/MicroC/CLex.fsl
+   fsyacc --module ./Assignment7/MicroC/CPar ./Assignment7/MicroC/CPar.fsy
    dotnet fsi -r ../../fsharp/FsLexYacc.Runtime.dll Util.fs Absyn.fs CPar.fs CLex.fs Parse.fs Machine.fs Comp.fs ParseAndComp.fs   
 
    open ParseAndComp;;
