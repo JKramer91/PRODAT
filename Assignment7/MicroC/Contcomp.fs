@@ -300,6 +300,8 @@ and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) (C : instr list) : inst
            (IFNZRO labtrue 
              :: cExpr e2 varEnv funEnv (addJump jumpend C2))
     | Call(f, es) -> callfun f es varEnv funEnv C
+    | PreInc acc -> cAccess acc varEnv funEnv (DUP :: LDI :: CSTI 1 :: ADD :: STI :: C)
+    | PreDec acc -> cAccess acc varEnv funEnv (DUP :: LDI :: CSTI 1 :: SUB :: STI :: C)  
 
 (* Generate code to access variable, dereference pointer or index array: *)
 
