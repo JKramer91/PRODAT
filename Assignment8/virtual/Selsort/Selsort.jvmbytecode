@@ -1,0 +1,50 @@
+  public static void SelectionSort(int[]);
+    descriptor: ([I)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=4, args_size=1
+         0: iconst_0 // load int value 0 onto the top of  stack  (i=0)
+         1: istore_1 // Store 0 in variable 1 (i = 0)
+         2: iload_1 // Load variable 1, which is i = 0, on top of stack 
+         3: aload_0 // Load reference to "arr" onto top of stack 
+         4: arraylength // get the length of arr
+         5: if_icmpge     57 // If i >= arr.length, jump to return (exit the loop)
+         8: iload_1 // Load i onto top of stack 
+         9: istore_2 // store int value 0 into variable 2.  (int least = i);
+        10: iload_1 // Load i ontop top of stack
+        11: iconst_1 // Load constant 1 on top of stack
+        12: iadd // Add i + 1
+        13: istore_3 // Store i + 1 in variable 3 (j = i+1)
+        14: iload_3 // Load j onto top of stack
+        15: aload_0 // Load reference to arr on top of stack
+        16: arraylength // Get length of arr 
+        17: if_icmpge     37 // Comparison j < arr.length
+        20: aload_0 // Load reference to arr onto top of stack
+        21: iload_3 // Load j onto top of stack
+        22: iaload // arr[j]
+        23: aload_0 // Load refeence to arr onto top of stack
+        24: iload_2 // Load variable least onto top of stack
+        25: iaload // arr[least]
+        26: if_icmpge     31 // Comparison arr[j] < arr[least]
+        29: iload_3 // Load j onto top of stack
+        30: istore_2 // Store j into least (least = j)
+        31: iinc          3, 1 // Increment j by 1 (j++)
+        34: goto          14 // New iteration of the inner loop
+        37: aload_0 // Load reference to arr onto top of stack
+        38: iload_1 // Load i on top of stack
+        39: iaload // arr[i]
+        40: istore_3 // Store arr[i] in variable 3 (tmp = arr[i])
+        41: aload_0 // Load reference to arr onto top of stack
+        42: iload_1 // Load i on top of stack
+        43: aload_0 // Load reference to arr onto top of stack
+        44: iload_2 // Load least on top of stack
+        45: iaload // arr[least]
+        46: iastore // arr[i] = arr[least]
+        47: aload_0 // Load reference to arr onto top of stack
+        48: iload_2 // Load variable least onto top of stack
+        49: iload_3 // // Load tmp onto top of stack
+        50: iastore  // arr[least] = tmp;
+        51: iinc          1, 1 //increment local var 1 with 1  (i++;)
+        54: goto          2 //Jump to to outer loop.  (for (int i = 0; i < arr.length; i++))
+        57: return //End of function, return. 
+
