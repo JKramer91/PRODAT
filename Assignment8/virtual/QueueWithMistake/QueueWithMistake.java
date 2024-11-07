@@ -1,3 +1,7 @@
+package Assignment8.virtual.QueueWithMistake;
+
+import java.util.concurrent.locks.ReentrantLock;
+
 // Lock-based queue with memory management mistake
 // sestoft@itu.dk * 2013-10-20
 
@@ -97,11 +101,24 @@ class SentinelLockQueue implements Queue {
     return true;
   }
 
+  // old get method
+  /*
+   * public synchronized int get() {
+   * if (head.next == null)
+   * return -999;
+   * Node first = head;
+   * head = first.next;
+   * return head.item;
+   * 
+   * }
+   */
+
   public synchronized int get() {
     if (head.next == null)
       return -999;
     Node first = head;
     head = first.next;
+    first.next = null;
     return head.item;
   }
 }
