@@ -6,6 +6,7 @@
     <Description>Runtime for FsLex/FsYacc lexer/parser generation tools</Description>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../../Assignment7/MicroC/Parse.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Lexing.fsi" />
     <Compile Include="Lexing.fs" />

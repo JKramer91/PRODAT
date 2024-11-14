@@ -1,12 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
+    <Compile Include="../Assignment7/MicroC/ParseAndContcomp.fs" />
+    <Compile Include="../Assignment7/MicroC/Parse.fs" />
     <Compile Include="ex2_4Handout.fs" />
   </ItemGroup>
-
 </Project>
