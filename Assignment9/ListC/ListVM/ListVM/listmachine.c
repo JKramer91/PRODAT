@@ -472,7 +472,7 @@ void initheap() {
 
 void mark(word *block) {
   //Idea for mark:
-  if (inHeap((word *)block)) {
+  if (inHeap(block)) {
     block[0] = Paint(block[0], Black);
     // Get the number of references in the block
     int numReferences = Length(block[0]);
@@ -486,8 +486,11 @@ void mark(word *block) {
 
 }
 void markPhase(word s[], word sp) {
-  // Loop through stack s
-  // For each non-nil reference, that is, if CDR is NIL, call mark()
+  for (int i = 0; i <= sp; i++) {
+    if (!IsInt(s[i] && s[i] != 0)) {
+      mark((word*)s[i]);
+    }
+  }
 }
 
 void sweepPhase() {
