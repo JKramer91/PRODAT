@@ -487,16 +487,27 @@ void mark(word *block) {
 }
 void markPhase(word s[], word sp) {
   for (int i = 0; i <= sp; i++) {
-    if (!IsInt(s[i] && s[i] != 0)) {
+    if (inHeap((word*) s[i])) {
       mark((word*)s[i]);
     }
   }
 }
 
 void sweepPhase() {
-  printf("sweeping ...\n");
-  // TODO: Actually sweep
-}
+  word* heapPtr = heap; 
+  while (heapPtr < afterHeap) {
+    if (Color(heapPtr[0]) == Black) {
+      heapPtr[0] = Paint(heapPtr[0], White);
+    }
+    if (Color(heapPtr[0]) == White) {
+      heapPtr[0] = Paint(heapPtr[0], Blue);
+      heapPtr[1] = (word) freelist; 
+      freelist = heapPtr;
+    } 
+
+      }
+    heapPtr += Length(heapPtr[0]) + 1;
+  }
 
 void collect(word s[], word sp) {
   markPhase(s, sp);
