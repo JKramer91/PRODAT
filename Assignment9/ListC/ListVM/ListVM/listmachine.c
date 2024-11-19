@@ -472,12 +472,12 @@ void initheap() {
 
 void mark(word *block) {
   //Idea for mark:
-  if (inHeap(block)) {
+  if (inHeap(block) && Color(block[0] != Black)) {
     block[0] = Paint(block[0], Black);
     // Get the number of references in the block
     int numReferences = Length(block[0]);
     // traverse and recursively mark each reference in the block
-    for (int i = 1; i <= numReferences; i++) {
+    for (int i = 1; i < numReferences; i++) {
         // recursively mark each referenced object
         mark((word *)block[i]);
     }
@@ -487,7 +487,7 @@ void mark(word *block) {
 }
 void markPhase(word s[], word sp) {
   for (int i = 0; i <= sp; i++) {
-    if (inHeap((word*) s[i])) {
+    if (!IsInt(s[i]) && s[i] != 0) {
       mark((word*)s[i]);
     }
   }
@@ -503,10 +503,15 @@ void sweepPhase() {
       heapPtr[0] = Paint(heapPtr[0], Blue);
       heapPtr[1] = (word) freelist; 
       freelist = heapPtr;
-    } 
+      int len = Length(heapPtr[0]);
+      if (heapPtr < afterHeap -1 && (heapPtr[len + 1]) == White) {
+        len += Length(heapPtr[len + 1]);
+        heapPtr[0]= mkheader(BlockTag(heapPtr[0]), len, Blue);
 
       }
-    heapPtr += Length(heapPtr[0]) + 1;
+    }
+    heapPtr += Length(heapPtr[0]) + 1; 
+    }
   }
 
 void collect(word s[], word sp) {
