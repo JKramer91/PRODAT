@@ -114,7 +114,7 @@ let rec prodContOptimised xs c =
 let rec prodContOptimised2 xs c =
     match xs with
     | [] -> c 1
-    | x :: xr when x = 0 -> c 0
+    | x :: _ when x = 0 -> c 0
     | x :: xr -> prodContOptimised2 xr (fun y -> c (x * y))
 
 printfn "\nTest 11.4 a) Results: \n"
@@ -137,7 +137,7 @@ printfn "\nTest 11.4 b) (prodi) \n"
 let rec prodi xs acc =
     match xs with
     | [] -> 1 * acc
-    | x :: xr when x = 0 -> 0 * acc
+    | x :: _ when x = 0 -> 0 * acc
     | x :: xr -> prodi xr (x * acc)
 
 printfn "result of prodi without zero:  %A" (prodi [ 2; 5; 7 ] 1)
