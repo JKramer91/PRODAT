@@ -9,10 +9,14 @@
     <Compile Include="Icon.fs" />
     <Compile Include="Contfun.fs" />
     <Compile Include="Contimp.fs" />
-    <Compile Include = "ElevenOneAndTwoAndThreeAndFour.fs" />   
+    <Compile Include="ElevenOneAndTwoAndThreeAndFour.fs" />   
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="../../fsharp/FsLexYacc.Runtime.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsLexYacc.Runtime" Version="11.3.0" />
   </ItemGroup>
 </Project>
