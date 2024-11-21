@@ -1,0 +1,42 @@
+Compiling and loading continuation-based evaluators (cont/README.TXT)
+---------------------------------------------------------------------
+
+A. Loading two continuation-based interpreters for a functional
+   language with exceptions:
+
+   dotnet fsi Contfun.fs
+
+   open Contfun;;
+   eval1 ex1 [];; 
+   eval1 ex2 [("n", Int 10)];
+   #q;;
+
+
+B. Loading two continuation-based interpreters for an imperative
+   language with exceptions:
+
+   dotnet fsi Contimp.fs
+
+   open Contimp;;
+   run1 ex1;;
+   run1 ex2;;
+   run2 ex3;;
+
+
+C. Loading a continuation-based interpreter for micro-Icon, a language
+   in which an expression can have multiple results:
+
+   dotnet fsi Icon.fs
+
+   open Icon;;
+   run ex1;;
+   run ex2;;
+   run ex3and;;
+   run ex3or;;
+
+
+D. Compile and run example illustrating longjmp and setjmp in C (under Unix):
+
+   gcc testlongjmp.c -o testlongjmp
+   ./testlongjmp 10
+   ./testlongjmp 11
