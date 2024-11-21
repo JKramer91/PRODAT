@@ -9,7 +9,7 @@
     <Compile Include="Icon.fs" />
     <Compile Include="Contfun.fs" />
     <Compile Include="Contimp.fs" />
-    <Compile Include = "ElevenOneAndTwoAndThree.fs" />   
+    <Compile Include = "ElevenOneAndTwoAndThreeAndFour.fs" />   
   </ItemGroup>
 
   <ItemGroup>
