@@ -35,6 +35,7 @@ type expr =
   | Or  of expr * expr
   | Seq of expr * expr
   | Every of expr 
+  | Prim1 of string * expr
   | Fail;;
 
 (* Runtime values and runtime continuations *)
@@ -88,6 +89,22 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
               | _ -> Str "unknown prim2")
               econt1)
           econt
+    | Prim1 (ope, e) -> 
+      eval e (fun v -> fun econt1 -> 
+        match (ope, v) with 
+        | ("sqr", Int i) -> 
+          cont (Int(i*i)) econt1 
+        | ("even", Int i) -> 
+          if i % 2 = 0 then 
+            cont (Int i) econt1 
+          else 
+            econt1()
+        | ("multiples", Int i) -> 
+          let rec multi x =
+            cont (Int (i+x)) (fun () -> multi (i+x))
+          multi i
+        | _ -> Str "unknown prim1")
+        econt
     | And(e1, e2) -> 
       eval e1 (fun _ -> fun econt1 -> eval e2 cont econt1) econt
     | Or(e1, e2) -> 
@@ -98,6 +115,7 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
     | Every e -> 
       eval e (fun _ -> fun econt1 -> econt1 ())
              (fun () -> cont (Int 0) econt)
+    
     | Fail -> econt ()
 
 let run e = eval e (fun v -> fun _ -> v) (fun () -> (printfn "Failed"; Int 0));
@@ -137,3 +155,28 @@ let ex8 = Write(Prim("<", CstI 4, FromTo(1, 10)));
 
 // every(write(4 < (1 to 10)))
 let ex9 = Every(Write(Prim("<", CstI 4, FromTo(1, 10))));
+
+// Exercise 11.8
+// (i)
+let ex10 = Every(Write(Prim("+", CstI 1, Prim("*", CstI 2, FromTo(1, 4)))))
+
+let ex11 = Every(Write(Prim("+", FromTo(1, 2), Prim("*", CstI 10, FromTo(2, 4)))))
+
+// (ii)
+let ex12 = Write(Prim("<", CstI 50, Prim("*", CstI 7, FromTo(1, 20))))
+
+// (iii)
+
+(* For instance, square(3 to 6) should
+succeed four times, with the results 9, 16, 25, 36, and even(1 to 7) should suc-
+ceed three times with the results 2, 4, 6. *)
+
+//Test of eval after modification 
+let ex13 = Every(Write(Prim1("sqr", FromTo(3, 6))))
+
+let ex14 = Every(Write(Prim1("even", FromTo(1,7))))
+
+// (iiii)
+let ex15 = Every(Write(Prim1("multiples", CstI 3)))
+
+let ex16 = Every(Write(Prim1("multiples", FromTo(3,4))))
